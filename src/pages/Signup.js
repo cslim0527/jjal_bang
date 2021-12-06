@@ -1,10 +1,21 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 
 const Signup = () => {
   const history = useHistory()
   const idInputRef = useRef()
+
+  const [id_value, setId] = useState('')
+  const [nick_value, setNick] = useState('')
+  const [pw_value, setPw] = useState('')
+  const [check_pw_value, setCheckPw] = useState('')
+  const [double_check_value, setDoubleCheck] = useState(null)
+  const [btn_disabled, setBtnDisabled] = useState(true)
+  const [id_alert, setIdAlert] = useState(false)
+  const [nick_alert, setNickAlert] = useState(false)
+  const [pw_alert, setPwAlert] = useState(false)
+  const [double_check_alert, setDoubleCheckAlert] = useState(false)
 
   const handleClickLogo = () => {
     history.push('/')
@@ -14,9 +25,81 @@ const Signup = () => {
     history.push('/')
   }
 
+  const handleCheckIdRedup = () => {
+    if (id_value === '') {
+      alert('아이디를 입력해주세요')
+      return
+    }
+
+    // TODO  중복확인 실제 정보에 따라 true / false 값 세팅할것
+    setDoubleCheck(true)
+  }
+
+  const handleChangeId = (e) => {
+    setId(e.target.value)
+    setDoubleCheck(null)
+    setBtnDisabled(true)
+  }
+
+  const handleChangeNick = (e) => {
+    setNick(e.target.value)
+  }
+
+  const handleChangePw = (e) => {
+    setPw(e.target.value)
+  }
+
+  const handleChangeCheckPw = (e) => {
+    setCheckPw(e.target.value)
+  }
+
   useEffect(() => {
     idInputRef.current.focus()
   }, [])
+
+  useEffect(() => {
+    const idRegx = /^[a-z0-9_-]\w{5,20}$/
+    if (id_value !== '') {
+      idRegx.test(id_value) ? setIdAlert(false) : setIdAlert(true)
+    } 
+
+    const nickRegx = /^[가-힣a-zA-Z][가-힣a-zA-Z0-9]{1,8}/g
+    if (nick_value !== '') {
+      nickRegx.test(nick_value) ? setNickAlert(false) : setNickAlert(true)
+    } 
+
+    const pwRegx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/g
+    if (pw_value !== '') {
+      pwRegx.test(pw_value) ? setPwAlert(false) : setPwAlert(true)
+    } 
+
+    if (check_pw_value !== '') {
+      check_pw_value === pw_value ? setDoubleCheckAlert(false) : setDoubleCheckAlert(true)
+    } 
+  }, [id_value, nick_value, pw_value, check_pw_value, double_check_value])
+
+
+  useEffect(() => {
+    const alerts = [id_alert, nick_alert, pw_alert, double_check_alert]
+    if (id_value !== '' && nick_value !== '' && pw_value !== '' && check_pw_value !== '' && double_check_value) { 
+      console.log(alerts)
+      if (alerts.some(a => a === true)) {
+        setBtnDisabled(true)
+      } else {
+        setBtnDisabled(false)
+      }
+    }
+  }, [id_alert, nick_alert, pw_alert, double_check_alert, double_check_value])
+  
+  const renderDoubleChkBtn = () => {
+    if (double_check_value === null) {
+      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn">중복확인</button>
+    } else if (double_check_value === false) {
+      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn fail" disabled>사용불가</button>
+    } else {
+      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn success" disabled>사용가능</button>
+    }
+  }
 
   return (
     <SignupWrap>
@@ -33,23 +116,29 @@ const Signup = () => {
         <div className="site-signup">
           <p className="label">or with JJAL-BANG</p>
           <div className="control-group">
-            <div className="signup-controls user-id">
-              <input ref={idInputRef} placeholder="아이디" type="text" />
-              <button type="button" className="double-check-btn">중복확인</button>
+            <div className="signup-controls">
+              <div className="user-id-control">
+                <input ref={idInputRef} onChange={handleChangeId} placeholder="아이디" type="text" />
+                { renderDoubleChkBtn() }
+              </div>
+              { id_alert && <p className="alert-msg">영문/숫자 특수문자(_-)조합 6~20자 이상 아이디를 입력해주세요.</p> }
             </div>
             <div className="signup-controls">
-              <input placeholder="닉네임" type="password" />
+              <input placeholder="닉네임" onChange={handleChangeNick} type="text" />
+              { nick_alert && <p className="alert-msg">영문/한글로 시작하는 2-8자 닉네임을 입력해주세요.</p> }
             </div>
             <div className="signup-controls">
-              <input placeholder="비밀번호" type="password" />
+              <input placeholder="비밀번호" onChange={handleChangePw} type="password" />
+              { pw_alert && <p className="alert-msg">비밀번호는 숫자와 영문자 특수문자(!@#$%^*+=-)<br/>조합으로 8~20자리를 사용해야 합니다.</p> }
             </div>
             <div className="signup-controls">
-              <input placeholder="비밀번호확인" type="password" />
+              <input placeholder="비밀번호확인" onChange={handleChangeCheckPw} type="password" />
+              { double_check_alert && <p className="alert-msg">비밀번호 확인이 일치하지 않습니다.</p> }
             </div>
           </div>
 
           <div className="btn-group">
-            <button type="button" className="signup-btn">회원가입</button>
+            <button type="button" className="signup-btn" disabled={btn_disabled}>회원가입</button>
           </div>
         </div>
       </div>
@@ -66,6 +155,13 @@ const SignupWrap = styled.div`
   background-color: #141518;
   position: relative;
 
+  .alert-msg {
+    padding: 3px;
+    color: #f44336;
+    font-size: 12px;
+    text-align: left;
+  }
+
   .signup-container {
     max-width: 350px;
     margin: 0 auto;
@@ -78,7 +174,7 @@ const SignupWrap = styled.div`
     }
   }
 
-  .signup-controls.user-id {
+  .user-id-control {
     position: relative;
 
     .double-check-btn {
@@ -93,6 +189,16 @@ const SignupWrap = styled.div`
       background-color: transparent;
       border-radius: 3px;
       cursor: pointer;
+
+      &.success {
+        border-color: #4caf50;
+        background-color: #4caf50;
+      }
+
+      &.fail {
+        border-color: #f44336;
+        background-color: #f44336;
+      }
     }
   }
 
@@ -142,6 +248,11 @@ const SignupWrap = styled.div`
     border-radius: 5px;
     padding: 10px 25px;
     background-color: #5c69ff;
+
+    &:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
   }
 
   .signup-link {
