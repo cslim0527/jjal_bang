@@ -21,4 +21,4 @@ const GridBox = styled.div`
   ${(props) => props.is_container && `max-width: 1264px; margin: 0 auto;`}
 `
 
-export default Grid;
+export default Grid
