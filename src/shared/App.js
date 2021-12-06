@@ -14,6 +14,8 @@ function App() {
     <div className="App">
       <GlobalStyles/>
       <Route path="/" component={PostList} exact />
+      <Route path="/login" component={Login} exact />
+      <Route path="/signup" component={Signup} exact />
     </div>
   )
 }
