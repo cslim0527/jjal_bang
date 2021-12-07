@@ -10,6 +10,7 @@ import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 
 function App() {
+
   return (
     <div className="App">
       <GlobalStyles/>
@@ -20,4 +21,7 @@ function App() {
   )
 }
 
-export default App
+export default App;
+
+
+
