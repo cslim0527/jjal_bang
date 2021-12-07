@@ -1,6 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
+import api from '../api/signup'
+
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 const Signup = () => {
   const history = useHistory()
@@ -11,7 +14,8 @@ const Signup = () => {
   const [pw_value, setPw] = useState('')
   const [check_pw_value, setCheckPw] = useState('')
   const [double_check_value, setDoubleCheck] = useState(null)
-  const [btn_disabled, setBtnDisabled] = useState(true)
+  const [check_btn_disabled, setCheckBtnDisabled] = useState(true)
+  const [join_btn_disabled, setJoinBtnDisabled] = useState(true)
   const [id_alert, setIdAlert] = useState(false)
   const [nick_alert, setNickAlert] = useState(false)
   const [pw_alert, setPwAlert] = useState(false)
@@ -25,6 +29,16 @@ const Signup = () => {
     history.push('/')
   }
 
+  const fetchIdCheck = async () => {
+    setDoubleCheck('loading')
+    const { ok, result } = await api.checkId()
+    if (ok === 'success' && result) {
+      setDoubleCheck(true)
+    } else {
+      setDoubleCheck(false)
+    }
+  }
+
   const handleCheckIdRedup = () => {
     if (id_value === '') {
       alert('아이디를 입력해주세요')
@@ -32,13 +46,14 @@ const Signup = () => {
     }
 
     // TODO  중복확인 실제 정보에 따라 true / false 값 세팅할것
-    setDoubleCheck(true)
+    // setDoubleCheck(true)
+    fetchIdCheck()
   }
 
   const handleChangeId = (e) => {
     setId(e.target.value)
     setDoubleCheck(null)
-    setBtnDisabled(true)
+    setJoinBtnDisabled(true)
   }
 
   const handleChangeNick = (e) => {
@@ -61,6 +76,7 @@ const Signup = () => {
     const idRegx = /^[a-z0-9_-]\w{5,20}$/
     if (id_value !== '') {
       idRegx.test(id_value) ? setIdAlert(false) : setIdAlert(true)
+      idRegx.test(id_value) ? setCheckBtnDisabled(false) : setCheckBtnDisabled(true)
     } 
 
     const nickRegx = /^[가-힣a-zA-Z][가-힣a-zA-Z0-9]{1,8}/g
@@ -81,19 +97,20 @@ const Signup = () => {
 
   useEffect(() => {
     const alerts = [id_alert, nick_alert, pw_alert, double_check_alert]
-    if (id_value !== '' && nick_value !== '' && pw_value !== '' && check_pw_value !== '' && double_check_value) { 
-      console.log(alerts)
+    if (id_value !== '' && nick_value !== '' && pw_value !== '' && check_pw_value !== '' && double_check_value === true) { 
       if (alerts.some(a => a === true)) {
-        setBtnDisabled(true)
+        setJoinBtnDisabled(true)
       } else {
-        setBtnDisabled(false)
+        setJoinBtnDisabled(false)
       }
     }
   }, [id_alert, nick_alert, pw_alert, double_check_alert, double_check_value])
   
   const renderDoubleChkBtn = () => {
     if (double_check_value === null) {
-      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn">중복확인</button>
+      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn" disabled={check_btn_disabled}>중복확인</button>
+    } else if (double_check_value === 'loading') {
+      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn"><ScaleLoader height="6" width="2" radius="2" margin="2" color="#fff" disabled/></button>
     } else if (double_check_value === false) {
       return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn fail" disabled>사용불가</button>
     } else {
@@ -104,7 +121,7 @@ const Signup = () => {
   return (
     <SignupWrap>
       <div className="signup-container">
-        <h1 onClick={handleClickLogo} className="logo">LOGO</h1>
+        <h1 onClick={handleClickLogo} className="logo">logo</h1>
 
         <div className="social-signup">
           <p className="label">Register with</p>
@@ -138,7 +155,7 @@ const Signup = () => {
           </div>
 
           <div className="btn-group">
-            <button type="button" className="signup-btn" disabled={btn_disabled}>회원가입</button>
+            <button type="button" className="signup-btn" disabled={join_btn_disabled}>회원가입</button>
           </div>
         </div>
       </div>
