@@ -16,6 +16,7 @@ function App() {
       <Route path="/" component={PostList} exact />
       <Route path="/login" component={Login} exact />
       <Route path="/signup" component={Signup} exact />
+      <Route path="/write" component={PostWrite} exact />
     </div>
   )
 }

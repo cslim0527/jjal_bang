@@ -4,7 +4,6 @@ import { useHistory } from 'react-router'
 import { accessLogin } from '../api/user'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
-import axios from 'axios'
 
 const Login = () => {
   const history = useHistory()
