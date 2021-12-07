@@ -1,10 +1,18 @@
-import React, { useRef, useEffect } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
+import { accessLogin } from '../api/user'
+
+import ScaleLoader from "react-spinners/ScaleLoader"
+import axios from 'axios'
 
 const Login = () => {
   const history = useHistory()
   const idInputRef = useRef()
+  const [login_disabeld, setLoginDisabled] = useState(true)
+  const [input_values, setInputValues] = useState({user_id: '', user_pw: ''})
+  const [spinner, setSpinner] = useState(false)
+  const [loginTrue, setLoginTrue] = useState(true)
 
   const handleClickLogo = () => {
     history.push('/')
@@ -18,9 +26,51 @@ const Login = () => {
     history.push('/signup')
   }
 
+  const handleChangeInput = (e) => {
+    setInputValues({
+      ...input_values,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const fetchLoginAccess = async () => {
+    const { user_id, user_pw } = input_values
+    const userInfo = {
+      userId: user_id,
+      password: user_pw
+    }
+    
+    const result = await accessLogin(userInfo)
+    console.log('로그인 응답', result)
+    return result
+  }
+
+  const handleClickLoginBtn = async () => {
+    setSpinner(true)
+    setLoginDisabled(true)
+    setLoginTrue(true)
+    const loginPass = await fetchLoginAccess()
+    setLoginTrue(loginPass.ok)
+    setSpinner(false)
+    setLoginDisabled(false)
+
+    if (loginPass.ok) {
+      history.push('/')
+    }
+  }
+
   useEffect(() => {
     idInputRef.current.focus()
   }, [])
+
+  useEffect(() => {
+    if (input_values.user_id !== '' && input_values.user_pw !== '') {
+      setLoginDisabled(false)
+    } else {
+      setLoginDisabled(true)
+    }
+
+  }, [input_values])
 
   return (
     <LoginWrap>
@@ -37,13 +87,16 @@ const Login = () => {
         <div className="site-login">
           <p className="label">or with JJAL-BANG</p>
           <div className="login-controls">
-            <input ref={idInputRef} placeholder="아이디" type="text" className="user-id" />
-            <input placeholder="비밀번호" type="password" className="user-pw" />
+            <input onChange={handleChangeInput} name="user_id" ref={idInputRef} placeholder="아이디" type="text" className="user-id" />
+            <input onChange={handleChangeInput} name="user_pw" placeholder="비밀번호" type="password" className="user-pw" />
+            { !loginTrue && <p className="alert-msg">로그인 정보가 일치하지 않습니다.</p> }
           </div>
 
           <div className="btn-group">
             <button onClick={handleClickGoSignUp} type="button" className="signup-link">계정이 없으신가요?</button>
-            <button type="button" className="login-btn">Sign in</button>
+            <button onClick={handleClickLoginBtn} type="button" className="login-btn" disabled={login_disabeld}>
+              {spinner ? <ScaleLoader height={15} width={2} radius={2} margin={2} color="#fff" disabled/> : 'Sign in'}
+            </button>
           </div>
         </div>
       </div>
@@ -59,6 +112,12 @@ const LoginWrap = styled.div`
   height: 100vh;
   background-color: #141518;
   position: relative;
+
+  .alert-msg {
+    padding: 3px;
+    color: #f44336;
+    font-size: 12px;
+  }
 
   .login-container {
     max-width: 350px;
@@ -117,6 +176,11 @@ const LoginWrap = styled.div`
     border-radius: 5px;
     padding: 10px 25px;
     background-color: #5c69ff;
+    
+    &:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
   }
 
   .signup-link {

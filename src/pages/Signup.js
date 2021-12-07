@@ -1,9 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
-import api from '../api/signup'
+import { checkId } from '../api/user'
 
-import ScaleLoader from "react-spinners/ScaleLoader";
+import ScaleLoader from "react-spinners/ScaleLoader"
 
 const Signup = () => {
   const history = useHistory()
@@ -31,7 +31,7 @@ const Signup = () => {
 
   const fetchIdCheck = async () => {
     setDoubleCheck('loading')
-    const { ok, result } = await api.checkId()
+    const { ok, result } = await checkId()
     if (ok === 'success' && result) {
       setDoubleCheck(true)
     } else {
@@ -46,7 +46,6 @@ const Signup = () => {
     }
 
     // TODO  중복확인 실제 정보에 따라 true / false 값 세팅할것
-    // setDoubleCheck(true)
     fetchIdCheck()
   }
 
