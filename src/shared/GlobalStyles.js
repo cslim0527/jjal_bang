@@ -38,6 +38,20 @@ if (window.location.pathname.indexOf('/user/favorites/') > -1) {
 }
 
 const GlobalStyles = createGlobalStyle`
+  @font-face {
+    font-family: 'paybooc-Bold';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Bold.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: 'paybooc-Light';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-07@1.0/paybooc-Light.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -48,11 +62,13 @@ const GlobalStyles = createGlobalStyle`
     color: ${styles.color};
     overflow-x: hidden;
     background-color: ${styles.background};
+    font-family: 'paybooc-Bold';
   }
 
   ol, ul, li {
     list-style-type: none;
   }
+  
 `
 export default GlobalStyles
 

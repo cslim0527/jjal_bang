@@ -80,6 +80,7 @@ const UploaderWrap = styled.label`
       text-align: center;
       
       p {
+        word-break: keep-all;
         margin-top: 10px;
         font-size: 14px;
       }

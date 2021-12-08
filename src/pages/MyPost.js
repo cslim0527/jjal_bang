@@ -27,10 +27,10 @@ const MyPage = () => {
         </Grid>
         <Grid is_container>
           <ul className="cate-list">
-            <li className="active">
+            <li className="active" onClick={() => history.push('/user/posts/userid')}>
               내짤
             </li>
-            <li>
+            <li onClick={() => history.push('/user/favorites/userid')}>
               북마크
             </li>
           </ul>

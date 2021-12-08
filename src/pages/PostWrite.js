@@ -76,6 +76,7 @@ const WriteWrap = styled.div`
       color: #c2c2c2;
       font-size: 14px;
       margin-bottom: 5px;
+      font-family: 'paybooc-Light';
     }
 
     .cancel-btn {
@@ -119,6 +120,39 @@ const WriteWrap = styled.div`
     .upload-btn {
       &:disabled {
         opacity: 0.5;
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    display: block;
+    padding: 16px;
+    padding-bottom: 80px;
+    
+    .write-left {
+      margin-bottom: 40px;
+      min-width: initial;
+
+      .preview-box {
+        min-height: 200px;
+      }
+    }
+
+    .pager {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin-bottom: 0;
+
+      .control-subject {
+        display: none;
+      }
+
+      .control-content {
+        .btn {
+          flex: 1;
+        }
       }
     }
   }
