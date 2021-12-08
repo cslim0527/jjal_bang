@@ -6,7 +6,8 @@ import Header from '../components/Header'
 import styled from 'styled-components'
 import Masonry from 'react-masonry-css'
 
-const PostList = () => {
+const PostList = (props) => {
+  console.log(props.history)
   const breakpointColumnsObj = {
       default: 4,
       1100: 3,

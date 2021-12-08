@@ -2,11 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import logo from '../images/logo.svg'
 import {FiSearch} from 'react-icons/fi'
-import {useHistory} from 'react-router'
 import _ from "lodash"
+import { history } from '../redux/configureStore';
+
+
 
 const Header = () => {
-    const history = useHistory();
+    console.log(history)
     const [text, setText] = React.useState();
 
     const onChange = (e) => {
@@ -44,7 +46,7 @@ const Header = () => {
                     <FiSearch size="30" color="white"></FiSearch>
                 </SearchBtn>
             </InputSearch>
-            <LoginBtn onClick={() => history.push('/login')}>LogIn</LoginBtn>
+            <LoginBtn onClick={()=> {history.push('/login')}}>LogIn</LoginBtn>
         </MainHeader>
     );
 };
