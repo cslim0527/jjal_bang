@@ -1,6 +1,6 @@
 import GlobalStyles from './GlobalStyles'
 import styled from 'styled-components'
-import { Route } from 'react-router-dom'
+import { Route, useLocation } from 'react-router'
 
 import PostList from '../pages/PostList'
 import PostWrite from '../pages/PostWrite'
@@ -11,27 +11,31 @@ import Login from '../pages/Login'
 import Signup from '../pages/Signup'
 import Header from '../components/Header'
 import Footer from '../components/Footer' 
-import { ConnectedRouter } from 'connected-react-router' 
-import { history } from '../redux/configureStore'
+
+const showHeaderFooter = ({pathname}) => {
+  if (pathname === '/login' || pathname === '/signup' || pathname === '/write') {
+    return false
+  } else {
+    return true
+  }
+}
 
 function App() {
-  console.log(history)
+  const location = useLocation()
+  console.log(location)
   return (
-  
-    <div className="App">
-      <Header/>
-        <GlobalStyles/>
-        <ConnectedRouter history={history}>
+    <>
+      {
+        showHeaderFooter(location) && (<><Header/><Footer/></>)
+      }
+      <GlobalStyles/>
         <Route path="/" component={PostList} exact />
         <Route path="/login" component={Login} exact />
         <Route path="/signup" component={Signup} exact />
         <Route path="/write" component={PostWrite} exact />
         <Route path="/user/posts/:user_id" component={MyPost} exact />
         <Route path="/user/favorites/:user_id" component={MyFavorites} exact />
-        </ConnectedRouter>
-      <Footer/>
-    </div>
-    
+    </>
   )
 }
 

@@ -34,7 +34,13 @@ const Footer = () => {
 
     return (
         <FooterArea>
-            <FooterWrap className={hide && 'hide'}>Footer</FooterWrap>
+            <FooterWrap className={hide && 'hide'}>
+                <ul>
+                    <li className="copyright">
+                        @ 2021 JJal, Team 6
+                    </li>
+                </ul>
+            </FooterWrap>
         </FooterArea>
     );
 };
@@ -54,6 +60,14 @@ const FooterWrap = styled.div`
     height: 50px;
     transition: 0.4s ease;
     background-color: #33353b;
+    display: flex;
+    align-items: center;
+    padding: 0 30px;
+    font-size: 13px;
+    color: #b4b9c2;
+    font-family: 'BMJUA';
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
+    
     &.hide {
         transform: translateY(80px);
     }

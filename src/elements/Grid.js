@@ -1,13 +1,14 @@
 import styled from 'styled-components'
 
 const Grid = (props) => {
-  const { is_container, children, is_flex, flex_align, flex_justify, height } = props
+  const { is_container, children, is_flex, flex_align, flex_justify, height, _className } = props
   const styles = {
     is_container,
     is_flex,
     flex_align,
     flex_justify,
     height,
+    className: _className
   }
 
   return (

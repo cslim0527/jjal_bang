@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory, useLocation } from 'react-router'
 import styled from 'styled-components'
 
-import { Grid } from '../elements'
+import { Grid, Button } from '../elements'
 import PostItem from '../components/PostItem'
 
 const MyPage = () => {
@@ -43,7 +43,7 @@ const MyPage = () => {
           !post_list.length
             ? (
               <div className="no-post-area">
-                <button onClick={handleClickGoWrite} type="button" className="write-btn">글쓰로 가기</button>
+                <Button _onClick={handleClickGoWrite} _type="button" _className="write-btn" version="green">글쓰로 가기</Button>
                 <div>여러분의 짤방을 공유해주세요!</div>
               </div>
             )
@@ -105,14 +105,6 @@ const MyPageWrap = styled.section`
     }
 
     .write-btn {
-      cursor: pointer;
-      border: 0;
-      color: #fff;
-      padding: 7px 14px 10px 9px;
-      height: 35px;
-      border-radius: 3px;
-      font-size: 14px;
-      background-color: #1bb76e;
       margin-bottom: 20px;
     }
   }

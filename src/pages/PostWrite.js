@@ -75,7 +75,7 @@ const PostWrite = () => {
 const WriteWrap = styled.div`
   display: flex;
   padding: 40px;
-
+  
   .write-left {
     width: 100%;
     max-width: 710px;
