@@ -6,26 +6,35 @@ const styles = {
 }
 
 // 페이지별 배경색 적용을 위해 switch
-switch(window.location.pathname) {
-  case '/login':
-    styles.color = '#fff'
-    styles.background = '#141518'
-    break 
 
-  case '/signup':
-    styles.color = '#fff'
-    styles.background = '#141518'
-    break 
+if (window.location.pathname === '/login') {
+  styles.color = '#fff'
+  styles.background = '#141518'
+}
 
-  case '/write':
-    styles.color = '#fff'
-    styles.background = '#141518'
-    break 
+if (window.location.pathname === '/signup') {
+  styles.color = '#fff'
+  styles.background = '#141518'
+}
 
-  default: 
-    styles.color = '#2f2f2f'
-    styles.background = '#fff'
-    break
+if (window.location.pathname === '/write') {
+  styles.color = '#fff'
+  styles.background = '#141518'
+}
+
+if (window.location.pathname === '/write') {
+  styles.color = '#fff'
+  styles.background = '#141518'
+}
+
+if (window.location.pathname.indexOf('/user/posts/') > -1) {
+  styles.color = '#fff'
+  styles.background = '#141518'
+}
+
+if (window.location.pathname.indexOf('/user/favorites/') > -1) {
+  styles.color = '#fff'
+  styles.background = '#141518'
 }
 
 const GlobalStyles = createGlobalStyle`
