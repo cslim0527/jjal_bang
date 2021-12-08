@@ -4,18 +4,34 @@ import styled from 'styled-components'
 import { IoIosClose } from "react-icons/io"
 import { ImPlus } from "react-icons/im"
 
+
+
 const TagMaker = () => {
   const [tags, setTag] = useState([])
   const [adder, setAdder] = useState(true)
   const [input_value, setInput] = useState('')
   const [mode, setMode] = useState(false)
+  const [prevent_space, setPreventSpace] = useState(false)
   let addInputRef = useRef(null)
 
-  // TODO  스페이스바 공백입력 막기, 엔터 입력으로 태그 작성 하기
   const handleChangeInput = (e) => {
-    setInput(e.target.value)
+    if (e.key === ' ') {
+      e.preventDefault()
+      setPreventSpace(true)
+      return
+    } else {
+      setPreventSpace(false)
+    }
+
+    if (e.key === 'Enter') {
+      addInputRef.current.blur()
+      return
+    }
+    
+    setInput(e.target.value.replace(/\s+/g, ''))
   }
 
+  
   const handleClickAddBtn = () => {
     setMode(true)
     setAdder(false)
@@ -68,7 +84,12 @@ const TagMaker = () => {
     }
 
     <div className={ mode ? 'tag-input' : 'tag-input hide' }>
-      <input ref={addInputRef} onBlur={handleBlurInput} onChange={handleChangeInput} defaultValue={input_value} type="text" size={input_value.length < 4 ? 1 : input_value.length}/>
+      <input ref={addInputRef} onBlur={handleBlurInput} onKeyDown={handleChangeInput} defaultValue={input_value} type="text" size={input_value.length < 4 ? 1 : input_value.length}/>
+      {
+        prevent_space
+          ? <p className="tooltip alert"> <span className="key">공백</span> 은 입력 할 수 없습니다</p>
+          : <p className="tooltip"> <span className="key">엔터</span> 로 작성완료</p>
+      }
     </div>  
     
     {
@@ -87,6 +108,7 @@ const TagMaker = () => {
 const TagMakerWrap = styled.article`
   display: flex;
   flex-wrap: wrap;
+  margin-top: 15px;
 
   .tag-btn {
     border: 0;
@@ -148,6 +170,7 @@ const TagMakerWrap = styled.article`
     font-size: 14px;
     color: #fff;
     margin: 0 10px 15px 0;
+    position: relative;
 
     input {
       color: inherit;
@@ -157,6 +180,54 @@ const TagMakerWrap = styled.article`
       background: none;
       outline: none;
       border: 0;
+    }
+
+    .tooltip {
+      position: absolute;
+      top: 110%;
+      left: -10px;
+      white-space: nowrap;
+      color: #fff;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background-color: #03a9f4;
+      border: 1px solid #2e3035;
+      box-shadow: 0 1px 4px 0 rgb(255 255 255 / 40%);
+      line-height: 15px;
+
+      .key {
+        font-size: 10px;
+        color: #000;
+        border-radius: 5px 5px 3px 3px;
+        padding: 1px 7px 3px 7px;
+        background-color: #fff;
+        border: 2px solid #1d1d1b;
+        position: relative;
+        top: -2px;
+      }
+
+      &.alert {
+        background-color: #f44336;
+
+        &::after {
+          border-bottom: 5px solid #f44336;
+        }
+      }
+
+      &::after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 0;
+        border-top: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-left: 5px solid transparent;
+        border-bottom: 5px solid #03a9f4;
+        position: absolute;
+        top: -10px;
+        left: 10px;
+      }
     }
 
     &.hide {
