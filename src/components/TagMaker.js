@@ -108,6 +108,7 @@ const TagMaker = () => {
 const TagMakerWrap = styled.article`
   display: flex;
   flex-wrap: wrap;
+  margin-top: 15px;
 
   .tag-btn {
     border: 0;

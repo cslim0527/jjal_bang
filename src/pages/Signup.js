@@ -17,7 +17,7 @@ const Signup = () => {
   const [check_btn_disabled, setCheckBtnDisabled] = useState(true)
   const [join_btn_disabled, setJoinBtnDisabled] = useState(true)
   const [id_alert, setIdAlert] = useState(false)
-  const [nick_alert, setNickAlert] = useState(false)
+  // const [nick_alert, setNickAlert] = useState(false)
   const [pw_alert, setPwAlert] = useState(false)
   const [double_check_alert, setDoubleCheckAlert] = useState(false)
 
@@ -55,10 +55,6 @@ const Signup = () => {
     setJoinBtnDisabled(true)
   }
 
-  const handleChangeNick = (e) => {
-    setNick(e.target.value)
-  }
-
   const handleChangePw = (e) => {
     setPw(e.target.value)
   }
@@ -78,11 +74,6 @@ const Signup = () => {
       idRegx.test(id_value) ? setCheckBtnDisabled(false) : setCheckBtnDisabled(true)
     } 
 
-    const nickRegx = /^[가-힣a-zA-Z][가-힣a-zA-Z0-9]{1,8}/g
-    if (nick_value !== '') {
-      nickRegx.test(nick_value) ? setNickAlert(false) : setNickAlert(true)
-    } 
-
     const pwRegx = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/g
     if (pw_value !== '') {
       pwRegx.test(pw_value) ? setPwAlert(false) : setPwAlert(true)
@@ -95,15 +86,15 @@ const Signup = () => {
 
 
   useEffect(() => {
-    const alerts = [id_alert, nick_alert, pw_alert, double_check_alert]
-    if (id_value !== '' && nick_value !== '' && pw_value !== '' && check_pw_value !== '' && double_check_value === true) { 
+    const alerts = [id_alert, pw_alert, double_check_alert]
+    if (id_value !== '' && pw_value !== '' && check_pw_value !== '' && double_check_value === true) { 
       if (alerts.some(a => a === true)) {
         setJoinBtnDisabled(true)
       } else {
         setJoinBtnDisabled(false)
       }
     }
-  }, [id_alert, nick_alert, pw_alert, double_check_alert, double_check_value])
+  }, [id_alert, pw_alert, double_check_alert, double_check_value])
   
   const renderDoubleChkBtn = () => {
     if (double_check_value === null) {
@@ -138,10 +129,6 @@ const Signup = () => {
                 { renderDoubleChkBtn() }
               </div>
               { id_alert && <p className="alert-msg">영문/숫자 특수문자(_-)조합 6~20자 이상 아이디를 입력해주세요.</p> }
-            </div>
-            <div className="signup-controls">
-              <input placeholder="닉네임" onChange={handleChangeNick} type="text" />
-              { nick_alert && <p className="alert-msg">영문/한글로 시작하는 2-8자 닉네임을 입력해주세요.</p> }
             </div>
             <div className="signup-controls">
               <input placeholder="비밀번호" onChange={handleChangePw} type="password" />
