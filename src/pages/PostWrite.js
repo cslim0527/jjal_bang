@@ -6,13 +6,14 @@ import TagMaker  from '../components/TagMaker'
 import ImageUploader from '../components/ImageUploader'
 
 const PostWrite = () => {
+  // TODO  이미지 삽입, 태그 최소 1개 이상일때 올리기 버튼 활성화 할 것
   const [upload_btn_disabled, setUploadBtnDisabled] = useState(true)
 
   return (
     <Grid is_container>
       <WriteWrap>
         <div className="write-left">
-          <ImageUploader setUploadBtnDisabled={setUploadBtnDisabled} />
+          <ImageUploader />
         </div>
         
         <div className="write-right">
@@ -35,6 +36,7 @@ const PostWrite = () => {
 
           <div className="write-control">
             <div className="control-subject">태그설정</div>
+            <div className="tag-guide">최소 1개 이상의 태그를 작성해주세요.</div>
             <div className="control-content">
               <TagMaker />
             </div>
@@ -69,10 +71,12 @@ const WriteWrap = styled.div`
       margin-bottom: 10px;
     }
 
-    .file-name {
+    .file-name,
+    .tag-guide {
       color: #c2c2c2;
       font-size: 14px;
       margin-bottom: 5px;
+      font-family: 'paybooc-Light';
     }
 
     .cancel-btn {
@@ -116,6 +120,39 @@ const WriteWrap = styled.div`
     .upload-btn {
       &:disabled {
         opacity: 0.5;
+      }
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    display: block;
+    padding: 16px;
+    padding-bottom: 80px;
+    
+    .write-left {
+      margin-bottom: 40px;
+      min-width: initial;
+
+      .preview-box {
+        min-height: 200px;
+      }
+    }
+
+    .pager {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      margin-bottom: 0;
+
+      .control-subject {
+        display: none;
+      }
+
+      .control-content {
+        .btn {
+          flex: 1;
+        }
       }
     }
   }

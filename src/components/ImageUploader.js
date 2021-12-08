@@ -5,7 +5,6 @@ import { BsUpload } from "react-icons/bs"
 
 const ImageUploader = (props) => {
   const history = useHistory()
-  const setUploadBtnDisabled = props?.setUploadBtnDisabled
   const [imgSrc, setImgSrc] = useState(null)
   const [fileObj, setFileObj] = useState(null)
   
@@ -37,11 +36,6 @@ const ImageUploader = (props) => {
     e.stopPropagation()
     e.preventDefault()
   }
-
-  useEffect(() => {
-    console.log('업로드 될 이미지 객체', fileObj)
-    fileObj ? setUploadBtnDisabled(false) : setUploadBtnDisabled(true) 
-  }, [fileObj])
 
   return (
     <UploaderWrap onDragEnter={preventDragOver} onDragOver={preventDragOver} onDrop={handleDragUploader}  className="preview-box" htmlFor="imageUploader">
@@ -86,6 +80,7 @@ const UploaderWrap = styled.label`
       text-align: center;
       
       p {
+        word-break: keep-all;
         margin-top: 10px;
         font-size: 14px;
       }
