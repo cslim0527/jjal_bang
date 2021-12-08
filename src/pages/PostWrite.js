@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 import { Grid } from '../elements'
@@ -8,12 +8,36 @@ import ImageUploader from '../components/ImageUploader'
 const PostWrite = () => {
   // TODO  이미지 삽입, 태그 최소 1개 이상일때 올리기 버튼 활성화 할 것
   const [upload_btn_disabled, setUploadBtnDisabled] = useState(true)
+  const [fileObj, setFileObj] = useState(null)
+  const [tags, setTag] = useState([])
+  const [imgInfo, setImgInfo] = useState({
+    name: '',
+    url: ''
+  })
+
+  const handleClickCancelUpload = () => {
+    setFileObj(null)
+    setTag([])
+    setImgInfo({
+      name: '',
+      url: ''
+    })
+  }
+
+  useEffect(() => {
+    console.log('[PostWrite]', fileObj, tags)
+    if (fileObj && tags.length) {
+      setUploadBtnDisabled(false)
+    } else {
+      setUploadBtnDisabled(true)
+    }
+  }, [fileObj, tags, imgInfo])
 
   return (
     <Grid is_container>
       <WriteWrap>
         <div className="write-left">
-          <ImageUploader />
+          <ImageUploader imgPreviewState={{imgInfo, setImgInfo}} uploaderFileState={{fileObj, setFileObj}}/>
         </div>
         
         <div className="write-right">
@@ -29,8 +53,8 @@ const PostWrite = () => {
           <div className="write-control">
             <div className="control-subject">이미지 정보</div>
             <div className="control-content">
-              <div className="file-name">파일명</div>
-              <button type="button" className="cancel-btn">업로드 취소</button>
+              <div className="file-name">{ imgInfo.name === '' ? '파일명' : imgInfo.name }</div>
+              <button onClick={handleClickCancelUpload} type="button" className="cancel-btn">업로드 취소</button>
             </div>
           </div>
 
@@ -38,7 +62,7 @@ const PostWrite = () => {
             <div className="control-subject">태그설정</div>
             <div className="tag-guide">최소 1개 이상의 태그를 작성해주세요.</div>
             <div className="control-content">
-              <TagMaker />
+              <TagMaker tagState={{tags, setTag}} />
             </div>
           </div>
 

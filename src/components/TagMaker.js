@@ -4,10 +4,8 @@ import styled from 'styled-components'
 import { IoIosClose } from "react-icons/io"
 import { ImPlus } from "react-icons/im"
 
-
-
-const TagMaker = () => {
-  const [tags, setTag] = useState([])
+const TagMaker = (props) => {
+  const {tags, setTag} = props.tagState
   const [adder, setAdder] = useState(true)
   const [input_value, setInput] = useState('')
   const [mode, setMode] = useState(false)
@@ -30,7 +28,6 @@ const TagMaker = () => {
     
     setInput(e.target.value.replace(/\s+/g, ''))
   }
-
   
   const handleClickAddBtn = () => {
     setMode(true)
@@ -46,7 +43,6 @@ const TagMaker = () => {
     if (input_value === '') {
       return
     }
-
 
     setTag([
       ...tags,
