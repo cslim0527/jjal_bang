@@ -16,44 +16,43 @@ const PostList = () => {
     const post_list = [
       {
         img: 'https://dummyimage.com/300x400/000/fff',
-        content: 'post content text'
+        content: '무한도전 '
       },
       {
         img: 'https://dummyimage.com/300x600/000/fff',
-        content: 'post content text'
+        content: '마포대교는 무너졌냐'
       },
       {
         img: 'https://dummyimage.com/300x500/000/fff',
-        content: 'post content text'
+        content: '정형돈'
       },
       {
         img: 'https://dummyimage.com/300x400/000/fff',
-        content: 'post content text'
+        content: '유재석'
       },
       {
         img: 'https://dummyimage.com/300x600/000/fff',
-        content: 'post content text'
+        content: '박명수'
       },
       {
         img: 'https://dummyimage.com/300x500/000/fff',
-        content: 'post content text'
+        content: '정준하'
       },
       {
         img: 'https://dummyimage.com/300x400/000/fff',
-        content: 'post content text'
+        content: '황광희'
       },
       {
         img: 'https://dummyimage.com/300x600/000/fff',
-        content: 'post content text'
+        content: '양세형'
       },
       {
         img: 'https://dummyimage.com/300x500/000/fff',
-        content: 'post content text'
+        content: '조세호'
       }
     ]
     return (
     <PostListWrap> 
-        <Header/> 
         <BackCl>
             <Canvas/>
             <Grid is_container="is_container">
@@ -66,11 +65,9 @@ const PostList = () => {
                 </Masonry>
             </Grid>
         </BackCl>
-        <Footer/>
     </PostListWrap>
     )
 }
-
 export default PostList;
 
 const BackCl = styled.div `
