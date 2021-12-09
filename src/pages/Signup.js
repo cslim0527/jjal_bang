@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { checkId } from '../api/user'
+import { API } from '../shared/api'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
 
@@ -31,10 +32,13 @@ const Signup = () => {
 
   const fetchIdCheck = async () => {
     setDoubleCheck('loading')
-    const { ok, result } = await checkId()
-    if (ok === 'success' && result) {
+    
+    const post_data = { userID : id_value }
+
+    try {
+      await API.users.checkId(post_data)
       setDoubleCheck(true)
-    } else {
+    } catch(err) {
       setDoubleCheck(false)
     }
   }
@@ -100,7 +104,7 @@ const Signup = () => {
     if (double_check_value === null) {
       return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn" disabled={check_btn_disabled}>중복확인</button>
     } else if (double_check_value === 'loading') {
-      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn"><ScaleLoader height="6" width="2" radius="2" margin="2" color="#fff" disabled/></button>
+      return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn"><ScaleLoader height={6} width={2} radius={2} margin={2} color="#fff" disabled/></button>
     } else if (double_check_value === false) {
       return <button type="button" onClick={handleCheckIdRedup} className="double-check-btn fail" disabled>사용불가</button>
     } else {
