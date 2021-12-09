@@ -34,7 +34,7 @@ const Header = () => {
             setShadow(true)
         }
 
-        searchRef.current.blur()
+        searchRef.current?.blur()
     }
 
     useEffect(() => {
