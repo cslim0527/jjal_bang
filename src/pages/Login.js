@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
-import { accessLogin } from '../api/user'
+import { API } from '../shared/api'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
 
@@ -34,14 +34,17 @@ const Login = () => {
 
   const fetchLoginAccess = async () => {
     const { user_id, user_pw } = input_values
-    const userInfo = {
-      userId: user_id,
+    const login_data = {
+      userID: user_id,
       password: user_pw
     }
     
-    const result = await accessLogin(userInfo)
-    console.log('로그인 응답', result)
-    return result
+    let result = await API.users.login(login_data)
+    console.log(result.data)
+
+    // 토큰 저장 로직 넣기
+
+    return result.data.errorMessage ? false : true
   }
 
   const handleClickLoginBtn = async () => {
@@ -49,13 +52,9 @@ const Login = () => {
     setLoginDisabled(true)
     setLoginTrue(true)
     const loginPass = await fetchLoginAccess()
-    setLoginTrue(loginPass.ok)
+    setLoginTrue(loginPass)
     setSpinner(false)
     setLoginDisabled(false)
-
-    if (loginPass.ok) {
-      history.push('/')
-    }
   }
 
   useEffect(() => {
@@ -94,7 +93,7 @@ const Login = () => {
           <div className="btn-group">
             <button onClick={handleClickGoSignUp} type="button" className="signup-link">계정이 없으신가요?</button>
             <button onClick={handleClickLoginBtn} type="button" className="login-btn" disabled={login_disabeld}>
-              {spinner ? <ScaleLoader height={15} width={2} radius={2} margin={2} color="#fff" disabled/> : 'Sign in'}
+              {spinner ? <ScaleLoader height={15} width={2} radius={2} margin={2} color="#fff" disabled/> : '로그인'}
             </button>
           </div>
         </div>
