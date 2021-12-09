@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Masonry from 'react-masonry-css'
+import { history } from '../redux/configureStore';
 
 import {Grid} from '../elements'
 import PostItem from '../components/PostItem'
@@ -67,6 +68,7 @@ const PostList = (props) => {
   </PostListWrap>
   )
 }
+
 
 export default PostList
 

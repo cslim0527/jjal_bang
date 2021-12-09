@@ -33,6 +33,7 @@ function App() {
         <Route path="/login" component={Login} exact />
         <Route path="/signup" component={Signup} exact />
         <Route path="/write" component={PostWrite} exact />
+        <Route path="/detail" component={PostDetail} exact />
         <Route path="/user/posts/:user_id" component={MyPost} exact />
         <Route path="/user/favorites/:user_id" component={MyFavorites} exact />
     </>
