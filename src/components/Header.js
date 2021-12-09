@@ -8,7 +8,6 @@ import { history } from '../redux/configureStore';
 
 
 const Header = () => {
-    console.log(history)
     const [text, setText] = React.useState();
 
     const onChange = (e) => {
@@ -29,8 +28,8 @@ const Header = () => {
     return (
         <MainHeader>
             <LogoPost>
-                <MainLogo><img src={logo}/></MainLogo>
-                <NewPost>
+                <MainLogo onClick={()=>{history.push('/')}}><img src={logo}/></MainLogo>
+                <NewPost onClick={()=>{history.push('/write')}}>
                     <img
                         src="https://s.imgur.com/desktop-assets/desktop-assets/icon-new-post.13ab64f9f36ad8f25ae3544b350e2ae1.svg"></img>
                     <span>NewPost</span>
@@ -68,6 +67,7 @@ const LogoPost = styled.div `
 const MainLogo = styled.h1 `
   margin-right: 10px;
   width: 80px;
+  cursor: pointer;
 `
 const NewPost = styled.button `
     display: flex;

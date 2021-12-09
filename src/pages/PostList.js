@@ -5,6 +5,7 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 import styled from 'styled-components'
 import Masonry from 'react-masonry-css'
+import { history } from '../redux/configureStore';
 
 const PostList = (props) => {
   console.log(props.history)
@@ -57,7 +58,10 @@ const PostList = (props) => {
         <BackCl>
             <Canvas/>
             <Grid is_container="is_container">
-                <Masonry breakpointCols={breakpointColumnsObj}
+                <Masonry
+                      style={{cursor:"pointer"}}
+                      onClick={()=>{history.push('/detail')}}
+                      breakpointCols={breakpointColumnsObj}
                       className="my-masonry-grid"
                       columnClassName="my-masonry-grid_column">
                       {post_list.map((post, index)=> {
@@ -70,6 +74,7 @@ const PostList = (props) => {
     )
 }
 export default PostList;
+
 
 const BackCl = styled.div `
   background-color: #2e3035;
