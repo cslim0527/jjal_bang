@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import logo from '../images/logo.svg'
-import {FiSearch} from 'react-icons/fi'
 import _ from "lodash"
 import { history } from '../redux/configureStore';
 
-
+import logo from '../images/logo.svg'
+import {FiSearch} from 'react-icons/fi'
+import { Grid, Button } from '../elements';
 
 const Header = () => {
     const [text, setText] = React.useState();
+    const [shadow, setShadow] = useState(false)
+    const searchRef = useRef(null)
 
     const onChange = (e) => {
         setText(e.target.value);
@@ -25,60 +27,88 @@ const Header = () => {
 
     const keyPress = React.useCallback(debounce, []);
 
+    const handleHeadeShadow = () => {
+        if (window.scrollY < 100) {
+            setShadow(false)
+        } else {
+            setShadow(true)
+        }
+
+        searchRef.current?.blur()
+    }
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleHeadeShadow)
+        return () => {
+            window.removeEventListener('scroll', handleHeadeShadow)
+        }
+    }, [])
+
     return (
-        <MainHeader>
+        <MainHeader className={shadow && "shadow"}>
             <LogoPost>
-                <MainLogo onClick={()=>{history.push('/')}}><img src={logo}/></MainLogo>
-                <NewPost onClick={()=>{history.push('/write')}}>
-                    <img
-                        src="https://s.imgur.com/desktop-assets/desktop-assets/icon-new-post.13ab64f9f36ad8f25ae3544b350e2ae1.svg"></img>
-                    <span>NewPost</span>
-                </NewPost>
+                <MainLogo onClick={() => history.push('/')}><img src={logo} alt=""/></MainLogo>
             </LogoPost>
             <InputSearch>
-                <MainInput
-                    value={text}
-                    onChange={onChange}
-                    type="text"
-                    placeholder="Image,#tag,@user"/>
-                <SearchBtn>
-                    <FiSearch size="30" color="white"></FiSearch>
-                </SearchBtn>
+                <div className="search-box">
+                    <MainInput
+                        ref={searchRef}
+                        value={text}
+                        onFocus={() => setShadow(false)}
+                        onChange={onChange}
+                        type="text"
+                        placeholder="Image,#tag,@user"/>
+                    <SearchBtn>
+                        <FiSearch size="30" color="white"></FiSearch>
+                    </SearchBtn>
+                </div>
             </InputSearch>
-            <LoginBtn onClick={()=> {history.push('/login')}}>LogIn</LoginBtn>
+            <Grid _className="btn-group">
+                <Button _onClick={() => history.push('/write') } _type="button" version="cobalt-blue">짤 등록</Button>
+                <Button _onClick={() => history.push('/login') } _type="button">로그인</Button>
+                <Button _onClick={() => history.push('/signup') } _type="button" version="green">회원가입</Button>
+            </Grid>
         </MainHeader>
-    );
-};
+    )
+}
 
-export default Header;
+export default Header
 
 const MainHeader = styled.div `
-  width: 100%;
-  background: #171544;
-  padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #171544;
+    padding: 4px 16px;
+    z-index: 9999;
+    width: 100%;
+    height: 64px;
+
+    &.shadow {
+        box-shadow: rgb(0, 0, 0) 0px 0px 25px 5px;
+        opacity: 0.8;
+    }
+
+    .btn-group {
+        button {
+            margin-left: 10px;
+        }
+    }
 `
+
+
 const LogoPost = styled.div `
   display: flex;
   align-items: center;
 `
 const MainLogo = styled.h1 `
-  margin-right: 10px;
-  width: 80px;
-  cursor: pointer;
-`
-const NewPost = styled.button `
     display: flex;
-    text-align: center;
-    height: 35px;
-    padding: 7px 14px 10px 9px;
-    border-radius: 3px;
-    font-size: 15px;
-    font-weight: 700;
-    background-color: #1bb76e;
-    color: white;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    width: 80px;
+    cursor: pointer;
 `
 const MainInput = styled.input `
     height: 36px;
@@ -103,17 +133,24 @@ const LoginBtn = styled.a `
     margin-right: 10px;
 `
 const InputSearch = styled.div `
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-    width: 80vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    .search-box {
+        position: relative;
+        width: 80vh;
+    }
 `
 const SearchBtn = styled.button `
-    position:absolute;
-    right: 0px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+    right: 8px;
     background: none;
     border: 0;
-    width: 36px;
-    height: 36px;
-    
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
 `

@@ -1,42 +1,5 @@
 import { createGlobalStyle } from "styled-components"
 
-const styles = {
-  color: '#2f2f2f',
-  background: '#fff'
-}
-
-// 페이지별 배경색 적용을 위해 switch
-
-if (window.location.pathname === '/login') {
-  styles.color = '#fff'
-  styles.background = '#141518'
-}
-
-if (window.location.pathname === '/signup') {
-  styles.color = '#fff'
-  styles.background = '#141518'
-}
-
-if (window.location.pathname === '/write') {
-  styles.color = '#fff'
-  styles.background = '#141518'
-}
-
-if (window.location.pathname === '/write') {
-  styles.color = '#fff'
-  styles.background = '#141518'
-}
-
-if (window.location.pathname.indexOf('/user/posts/') > -1) {
-  styles.color = '#fff'
-  styles.background = '#141518'
-}
-
-if (window.location.pathname.indexOf('/user/favorites/') > -1) {
-  styles.color = '#fff'
-  styles.background = '#141518'
-}
-
 const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: 'paybooc-Bold';
@@ -51,6 +14,14 @@ const GlobalStyles = createGlobalStyle`
     font-weight: normal;
     font-style: normal;
   }
+
+  @font-face {
+    font-family: 'BMJUA';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_one@1.0/BMJUA.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   * {
     margin: 0;
     padding: 0;
@@ -58,16 +29,15 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    color: ${styles.color};
+    color: #fff;
     overflow-x: hidden;
-    background-color: ${styles.background};
+    background-color: #141518;
     font-family: 'paybooc-Bold';
   }
 
   ol, ul, li {
     list-style-type: none;
   }
-  
 `
 export default GlobalStyles
 

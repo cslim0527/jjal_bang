@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import { BsUpload } from "react-icons/bs"
 
 const ImageUploader = (props) => {
-  const history = useHistory()
-  const [imgSrc, setImgSrc] = useState(null)
-  const [fileObj, setFileObj] = useState(null)
+  const {fileObj, setFileObj} = props.uploaderFileState
+  const {imgInfo, setImgInfo} = props.imgPreviewState
   
   const handleChangeUploader = (e) => {
     const file = e.target.files[0]
@@ -14,7 +12,10 @@ const ImageUploader = (props) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
-      setImgSrc(reader.result)
+      setImgInfo({
+        name: file.name,
+        url: reader.result
+      })
       setFileObj(file)
     }
   }
@@ -27,7 +28,10 @@ const ImageUploader = (props) => {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => {
-      setImgSrc(reader.result)
+      setImgInfo({
+        name: file.name,
+        url: reader.result
+      })
       setFileObj(file)
     }
   }
@@ -39,10 +43,10 @@ const ImageUploader = (props) => {
 
   return (
     <UploaderWrap onDragEnter={preventDragOver} onDragOver={preventDragOver} onDrop={handleDragUploader}  className="preview-box" htmlFor="imageUploader">
-      <img className="preview-img" src={imgSrc} alt=""/>
+      <img className="preview-img" src={imgInfo.url} alt=""/>
       <div className="guide-box">
         { 
-          !imgSrc 
+          !imgInfo.url 
             && (
               <>
                 <BsUpload /> 
