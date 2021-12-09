@@ -41,6 +41,7 @@ const PostCard = styled.div`
     background: linear-gradient(165deg, rgb(105, 216, 202) 0%, rgb(53, 146, 255) 50%, rgb(156, 49, 255) 100%);
     position: relative;
     border-radius: 5px;
+    cursor: pointer;
     /* max-width: 313.5px; */
 `
 const PostTitleWrap = styled.div`

@@ -2,10 +2,13 @@ import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
 import { API } from '../shared/api'
+import { useDispatch } from 'react-redux'
+import { actionCreators as userActions } from '../redux/modules/user'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
 
 const Login = () => {
+  const dispatch = useDispatch()
   const history = useHistory()
   const idInputRef = useRef()
   const [login_disabeld, setLoginDisabled] = useState(true)
@@ -39,12 +42,16 @@ const Login = () => {
       password: user_pw
     }
     
-    let result = await API.users.login(login_data)
-    console.log(result.data)
+    let res = await API.users.login(login_data)
+    if (res.data.result === 'success') {
+      console.log(res.data)
+      dispatch(userActions.loginAction({
+        userId: res.data.userId,
+        token: res.data.token
+      }))
+    }
 
-    // 토큰 저장 로직 넣기
-
-    return result.data.errorMessage ? false : true
+    return res.data.errorMessage ? false : true
   }
 
   const handleClickLoginBtn = async () => {
@@ -59,6 +66,9 @@ const Login = () => {
 
   useEffect(() => {
     idInputRef.current.focus()
+    
+    return () => {
+    }
   }, [])
 
   useEffect(() => {
@@ -66,6 +76,9 @@ const Login = () => {
       setLoginDisabled(false)
     } else {
       setLoginDisabled(true)
+    }
+
+    return () => {
     }
 
   }, [input_values])

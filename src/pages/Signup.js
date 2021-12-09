@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useHistory } from 'react-router'
-import { checkId } from '../api/user'
 import { API } from '../shared/api'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
@@ -39,6 +38,7 @@ const Signup = () => {
       await API.users.checkId(post_data)
       setDoubleCheck(true)
     } catch(err) {
+      console.log(err)
       setDoubleCheck(false)
     }
   }

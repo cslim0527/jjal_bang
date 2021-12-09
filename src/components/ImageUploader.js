@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef } from 'react'
 import styled from 'styled-components'
+
 import { BsUpload } from "react-icons/bs"
 
-const ImageUploader = (props) => {
+const ImageUploader = forwardRef((props, ref) => {
+  console.log(props)
   const {fileObj, setFileObj} = props.uploaderFileState
   const {imgInfo, setImgInfo} = props.imgPreviewState
   
@@ -55,10 +57,10 @@ const ImageUploader = (props) => {
             )
         }
       </div>
-      <input onChange={handleChangeUploader} type="file" id="imageUploader"/>
+      <input onChange={handleChangeUploader} ref={ref} type="file" id="imageUploader"/>
     </UploaderWrap>
   )
-}
+})
 
 const UploaderWrap = styled.label`
     cursor: pointer;

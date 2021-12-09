@@ -1,31 +1,36 @@
-import React, { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
+import React, { useEffect, useRef, useState, useMemo } from 'react'
+import styled from 'styled-components'
+import { history } from '../redux/configureStore'
 import _ from "lodash"
-import { history } from '../redux/configureStore';
 
 import logo from '../images/logo.svg'
 import {FiSearch} from 'react-icons/fi'
-import { Grid, Button } from '../elements';
+import { Grid, Button } from '../elements'
+import { useSelector } from 'react-redux'
+
 
 const Header = () => {
-    const [text, setText] = React.useState();
+    console.log('[Header]')
+    const login_state = useSelector(state => state.user) 
+    const [text, setText] = React.useState()
     const [shadow, setShadow] = useState(false)
+    const [myModal, setMyModal] = useState(false)
     const searchRef = useRef(null)
 
     const onChange = (e) => {
-        setText(e.target.value);
-        keyPress(e);
+        setText(e.target.value)
+        keyPress(e)
     }
 
     const debounce = _.debounce((e) => {
-        console.log("debounce :::", e.target.value);
-    }, 1000); // 디바운스
+        console.log("debounce :::", e.target.value)
+    }, 1000) // 디바운스
 
     const throttle = _.throttle((e) => {
-        console.log("throttle :::", e.target.value);
+        console.log("throttle :::", e.target.value)
     }, 1000) // 쓰로틀
 
-    const keyPress = React.useCallback(debounce, []);
+    const keyPress = React.useCallback(debounce, [])
 
     const handleHeadeShadow = () => {
         if (window.scrollY < 100) {
@@ -37,10 +42,62 @@ const Header = () => {
         searchRef.current?.blur()
     }
 
+    const handleMyModal = () => {
+        setMyModal(!myModal)
+    }
+
+    const handleClickLogout = () => {
+
+    }
+
+    const renderBtnGroup = () => {
+        const { user, is_login } = login_state
+        if (user !== null && is_login) { // 로그인 상태일때
+            return (
+                <Grid is_flex>
+                    <Button _onClick={() => history.push('/write') } _type="button" version="cobalt-blue">짤 등록</Button>
+                    <Grid _className="my-menu">
+                        <Button _onClick={handleMyModal} _className="my-menu-btn" _type="button">{login_state.user}</Button>
+
+                        { 
+                            myModal 
+                                && (
+                                    <div className="menu-modal">
+                                        <ul>
+                                            <li className='my-menu-item' onClick={() => history.push(`/user/posts/${login_state.user}`)}>내 짤목록</li>
+                                            <li className='my-menu-item' onClick={() => history.push(`/user/favorites/${login_state.user}`)}>북마크</li>
+                                            <li className='my-menu-item' onClick={handleClickLogout}>로그아웃</li>
+                                        </ul>
+                                    </div>
+                                )
+                        }
+                    </Grid>
+                </Grid>
+            )
+        } else {
+            return (
+                <>
+                    <Button _onClick={() => history.push('/write') } _type="button" version="cobalt-blue">짤 등록</Button>
+                    <Button _onClick={() => history.push('/login') } _type="button">로그인</Button>
+                    <Button _onClick={() => history.push('/signup') } _type="button" version="green">회원가입</Button>
+                </>
+            )
+        }
+    }
+
+    const handleCloseMyMenu = (e) => {
+        const isMyMenu = e.target.classList.contains('my-menu-btn')
+        if (!isMyMenu) {
+            setMyModal(false)
+        }
+    }
+
     useEffect(() => {
         window.addEventListener('scroll', handleHeadeShadow)
+        document.addEventListener('click', handleCloseMyMenu)
         return () => {
             window.removeEventListener('scroll', handleHeadeShadow)
+            document.removeEventListener('click', handleCloseMyMenu)
         }
     }, [])
 
@@ -64,9 +121,7 @@ const Header = () => {
                 </div>
             </InputSearch>
             <Grid _className="btn-group">
-                <Button _onClick={() => history.push('/write') } _type="button" version="cobalt-blue">짤 등록</Button>
-                <Button _onClick={() => history.push('/login') } _type="button">로그인</Button>
-                <Button _onClick={() => history.push('/signup') } _type="button" version="green">회원가입</Button>
+                { renderBtnGroup() }
             </Grid>
         </MainHeader>
     )
@@ -93,6 +148,36 @@ const MainHeader = styled.div `
     .btn-group {
         button {
             margin-left: 10px;
+        }
+    }
+
+    .my-menu {
+        position: relative;
+
+        .menu-modal {
+            position: absolute;
+            top: 90%;
+            right: 40%;
+            border-radius: 6px;
+            background-color: #53565d;
+            box-shadow: 0 9px 25px 0 rgb(0 0 0 / 78%);
+            -webkit-overflow-scrolling: touch;
+            padding: 5px 0;
+            overflow-y: auto;
+            word-break: keep-all;
+            z-index: 9999;
+            font-size: 13px;
+            min-width: 100px;
+            text-align: center;
+
+            li {
+                cursor: pointer;
+                padding: 8px 12px;
+
+                &:hover {
+                    background-color: rgb(118, 120, 125);
+                }
+            }
         }
     }
 `
