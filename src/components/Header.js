@@ -10,8 +10,6 @@ import logo from '../images/logo.svg'
 import {FiSearch} from 'react-icons/fi'
 import { Grid, Button } from '../elements'
 
-
-
 const Header = () => {
     console.log('[Header]')
     const dispatch = useDispatch()

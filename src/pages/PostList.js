@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import Masonry from 'react-masonry-css'
-import { history } from '../redux/configureStore';
 
 import {Grid} from '../elements'
 import PostItem from '../components/PostItem'
 
 const PostList = (props) => {
+  const [post_list, setPostList] = useState([])
 
   const breakpointColumnsObj = {
     default: 5,
@@ -15,44 +15,10 @@ const PostList = (props) => {
     500: 2,
     425: 1
   }
-  const post_list = [
-    {
-      img: 'https://dummyimage.com/300x400/000/fff',
-      content: '무한도전 '
-    },
-    {
-      img: 'https://dummyimage.com/300x600/000/fff',
-      content: '마포대교는 무너졌냐'
-    },
-    {
-      img: 'https://dummyimage.com/300x500/000/fff',
-      content: '정형돈'
-    },
-    {
-      img: 'https://dummyimage.com/300x400/000/fff',
-      content: '유재석'
-    },
-    {
-      img: 'https://dummyimage.com/300x600/000/fff',
-      content: '박명수'
-    },
-    {
-      img: 'https://dummyimage.com/300x500/000/fff',
-      content: '정준하'
-    },
-    {
-      img: 'https://dummyimage.com/300x400/000/fff',
-      content: '황광희'
-    },
-    {
-      img: 'https://dummyimage.com/300x600/000/fff',
-      content: '양세형'
-    },
-    {
-      img: 'https://dummyimage.com/300x500/000/fff',
-      content: '조세호'
-    }
-  ]
+
+  useEffect(() => {
+
+  }, [])
 
   return (
   <PostListWrap> 
@@ -60,15 +26,16 @@ const PostList = (props) => {
         <Masonry breakpointCols={breakpointColumnsObj}
               className="my-masonry-grid"
               columnClassName="my-masonry-grid_column">
-              {post_list.map((post, index)=> {
+
+            {post_list.map((post, index)=> {
               return <PostItem post={post} key={'post' + index}/>
             })}
+
         </Masonry>
     </Grid>
   </PostListWrap>
   )
 }
-
 
 export default PostList
 

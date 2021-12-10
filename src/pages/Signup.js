@@ -5,8 +5,8 @@ import { API } from '../shared/api'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
 
-const Signup = () => {
-  const history = useHistory()
+const Signup = (props) => {
+  const history = props.history
   const idInputRef = useRef()
 
   const [id_value, setId] = useState('')
@@ -88,6 +88,42 @@ const Signup = () => {
     } 
   }, [id_value, nick_value, pw_value, check_pw_value, double_check_value])
 
+  const sendSignupData = async (signup_info) => {
+    try {
+      const res = await API.users.signup(signup_info)
+      console.log('회원가입 성공', res)
+      return true
+    } 
+    
+    catch(err) {
+      console.log('회원가입 실패', err.response)
+      return false
+    }
+
+  }
+
+  const handleClickSingup = async () => {
+    setJoinBtnDisabled(true)
+
+    const signup_info = {
+      userID: id_value,
+      password: pw_value,
+      confirmPassword: check_pw_value
+    }
+
+    const result = await sendSignupData(signup_info)
+
+    if (result) {
+      alert('짤방 회원가입이 완료되었습니다.')
+      history.push('/login')
+    } else {
+      alert('회원가입 정보가 올바르지 않습니다. 다시 시도해주세요.')
+      history.replace('/signup')
+    }
+
+    setJoinBtnDisabled(false)
+
+  }
 
   useEffect(() => {
     const alerts = [id_alert, pw_alert, double_check_alert]
@@ -145,7 +181,7 @@ const Signup = () => {
           </div>
 
           <div className="btn-group">
-            <button type="button" className="signup-btn" disabled={join_btn_disabled}>회원가입</button>
+            <button type="button" className="signup-btn" onClick={handleClickSingup} disabled={join_btn_disabled}>회원가입</button>
           </div>
         </div>
       </div>

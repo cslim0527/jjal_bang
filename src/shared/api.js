@@ -26,6 +26,7 @@ export const API = {
   users: {
     checkId: (id) => instance.post('/api/users/checkId', id),
     login: (login_info) => instance.post('/api/users/auth', login_info),
+    signup: (signup_info) => instance.post('/api/users/users', signup_info)
   },
   post: {
     imageUpload: (img) => instance.post('/api/posts/uploadfile', img),
