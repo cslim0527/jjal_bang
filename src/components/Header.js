@@ -11,6 +11,7 @@ import {FiSearch} from 'react-icons/fi'
 import { Grid, Button } from '../elements'
 
 
+
 const Header = () => {
     console.log('[Header]')
     const dispatch = useDispatch()
@@ -21,19 +22,8 @@ const Header = () => {
     const searchRef = useRef(null)
 
     const onChange = (e) => {
-        setText(e.target.value)
-        keyPress(e)
+        setText(e.target.value);
     }
-
-    const debounce = _.debounce((e) => {
-        console.log("debounce :::", e.target.value)
-    }, 1000) // 디바운스
-
-    const throttle = _.throttle((e) => {
-        console.log("throttle :::", e.target.value)
-    }, 1000) // 쓰로틀
-
-    const keyPress = React.useCallback(debounce, [])
 
     const handleHeadeShadow = () => {
         if (window.scrollY < 100) {
@@ -117,7 +107,7 @@ const Header = () => {
                         onChange={onChange}
                         type="text"
                         placeholder="Image,#tag,@user"/>
-                    <SearchBtn>
+                    <SearchBtn  onClick={() => history.push(`/search/${text}`)}>
                         <FiSearch size="30" color="white"></FiSearch>
                     </SearchBtn>
                 </div>

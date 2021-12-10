@@ -2,25 +2,10 @@ import React from 'react';
 import styled from 'styled-components'
 import {useState} from 'react';
 import {BiTrash} from 'react-icons/bi'
+import axios from 'axios';
 
 const PostDetail = (props) => {
     const [names, setNames] = useState([
-        {
-            id: 1,
-            text: '안녕하세요'
-        }, {
-            id: 1,
-            text: '안녕하세요'
-        }, {
-            id: 1,
-            text: '안녕하세요'
-        }, {
-            id: 1,
-            text: '안녕하세요'
-        }, {
-            id: 1,
-            text: '안녕하세요'
-        }
     ]);
     // 더미데이터를 지정해줬다.
     const [inputText, setInputText] = useState("");
@@ -35,9 +20,12 @@ const PostDetail = (props) => {
         console.log(nextNames)
         setNextId(nextId + 1);
         setNames(nextNames);
-        setInputText(""); // 입력후 리셋
+        setInputText(""); // 입력후 리셋(빈 건 아니다)
     };
     const nameList = names.map((name) => <li key={name.id}>{name.text}</li>);
+    
+    
+
 
     return (
         <PostWrap>
@@ -89,45 +77,38 @@ const PostDetail = (props) => {
 export default PostDetail;
 
 const PostWrap = styled.div `
-    background-color: #474a51;
 `
 const UserPoster = styled.div `
     width: 600px;
     height: 400px;
     background: black;
     margin-top: 20px;
+    
 `
 const PostCommentInput = styled.input `
-    height: 36px;
-    background: hsla(0,0%,100%,.25);
-    border: 1px solid transparent;
-    padding: 8px 35px 8px 10px;
-    border-radius: 3px;
-    width: 80%;
-    outline: 0 none;
-    opacity: .8;
-    min-height: 36px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: .4px;
-    color: #fff;
-    text-shadow: inherit;
-    -webkit-text-fill-color: white;
+    min-height: 90px;
+    background-color: #33353b;
+    padding: 12px;
+    border-radius: 6px 6px 0 0;
+    width: 100%;
  `
 const CommentBtnwrap = styled.div `
     display: flex;
     justify-content: center;
     width: 850px;
     margin: 0 auto;
+    
 `
 const CommentPostwrap = styled.div `
     margin-top: 100px;
+    
 `
 const CommentBtn = styled.button `
     color: #b4b9c2;
     background: #464b57;
     cursor: default;
     width: 20%;
+    align-self: flex-end;
 
 `
 const UserComment = styled.div `
@@ -135,18 +116,23 @@ const UserComment = styled.div `
     display: flex;
     justify-content: left;
     width: 850px;
+    
 `
 const SubChart = styled.p `
     color: white;
+    margin-top: 50px;
+    width: 100%;
 `
 const PostChart = styled.div `
     width: 64px;
     height: 64px;
     background: black;
+    
 `
 const PostChartWrap = styled.div `
     display: flex;
     justify-content: center;
+    
 
 `
 const PostChartWrap1 = styled.div `
