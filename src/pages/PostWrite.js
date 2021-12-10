@@ -2,16 +2,17 @@ import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { API } from '../shared/api'
 import { useSelector } from 'react-redux'
+import { getCookie } from '../shared/Cookie'
 
 import { Grid } from '../elements'
 import TagMaker  from '../components/TagMaker'
 import ImageUploader from '../components/ImageUploader'
 import ScaleLoader from "react-spinners/ScaleLoader"
+import Permit from '../shared/Permit'
 
 // TODO  비로그인시 접근불가하게 막을 것
 const PostWrite = (props) => {
   const login_state = useSelector(state => state.user)
-  console.log('[PostWrite]', login_state)
   const { history } = props
   const [spinner, setSpinner] = useState(false)
   const uploaderInputRef = useRef(null)
@@ -96,44 +97,56 @@ const PostWrite = (props) => {
     }
   }, [fileObj, tags, imgInfo])
 
+  useEffect(() => {
+    const user = getCookie('id')
+    if (!user) {
+      alert('잘못된 접근입니다.')
+      history.goBack()
+      return
+    }
+  }, [])
+
+  
   return (
-    <Grid is_container>
-      <WriteWrap>
-        <div className="write-left">
-          <ImageUploader ref={uploaderInputRef} imgPreviewState={{imgInfo, setImgInfo}} uploaderFileState={{fileObj, setFileObj}}/>
-        </div>
-        
-        <div className="write-right">
-
-          <div className="write-control pager">
-            <div className="control-subject">짤방</div>
-            <div className="control-content">
-              <button type="button" className="btn back-btn" onClick={() => history.goBack()}>뒤로가기</button>
-              <button type="button" className="btn upload-btn" onClick={handleWritePost} disabled={upload_btn_disabled}>
-                { spinner ? <ScaleLoader height={14} color="#fff"/> : '올리기' }
-              </button>
-            </div>
+    <Permit>
+      <Grid is_container>
+        <WriteWrap>
+          <div className="write-left">
+            <ImageUploader ref={uploaderInputRef} imgPreviewState={{imgInfo, setImgInfo}} uploaderFileState={{fileObj, setFileObj}}/>
           </div>
+          
+          <div className="write-right">
 
-          <div className="write-control">
-            <div className="control-subject">이미지 정보</div>
-            <div className="control-content">
-              <div className="file-name">{ imgInfo.name === '' ? '파일명' : imgInfo.name }</div>
-              <button onClick={handleClickCancelUpload} type="button" className="cancel-btn">업로드 취소</button>
+            <div className="write-control pager">
+              <div className="control-subject">짤방</div>
+              <div className="control-content">
+                <button type="button" className="btn back-btn" onClick={() => history.goBack()}>뒤로가기</button>
+                <button type="button" className="btn upload-btn" onClick={handleWritePost} disabled={upload_btn_disabled}>
+                  { spinner ? <ScaleLoader height={14} color="#fff"/> : '올리기' }
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="write-control">
-            <div className="control-subject">태그설정</div>
-            <div className="tag-guide">최소 1개 이상의 태그를 작성해주세요.</div>
-            <div className="control-content">
-              <TagMaker tagState={{tags, setTag}} />
+            <div className="write-control">
+              <div className="control-subject">이미지 정보</div>
+              <div className="control-content">
+                <div className="file-name">{ imgInfo.name === '' ? '파일명' : imgInfo.name }</div>
+                <button onClick={handleClickCancelUpload} type="button" className="cancel-btn">업로드 취소</button>
+              </div>
             </div>
-          </div>
 
-        </div>
-      </WriteWrap>
-    </Grid>
+            <div className="write-control">
+              <div className="control-subject">태그설정</div>
+              <div className="tag-guide">최소 1개 이상의 태그를 작성해주세요.</div>
+              <div className="control-content">
+                <TagMaker tagState={{tags, setTag}} />
+              </div>
+            </div>
+
+          </div>
+        </WriteWrap>
+      </Grid>
+    </Permit>
   )
 }
 
