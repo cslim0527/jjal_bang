@@ -1,13 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { API } from '../shared/api'
+import { useSelector } from 'react-redux'
 
 import { Grid } from '../elements'
 import TagMaker  from '../components/TagMaker'
 import ImageUploader from '../components/ImageUploader'
 import ScaleLoader from "react-spinners/ScaleLoader"
 
+// TODO  비로그인시 접근불가하게 막을 것
 const PostWrite = (props) => {
+  const login_state = useSelector(state => state.user)
+  console.log('[PostWrite]', login_state)
   const { history } = props
   const [spinner, setSpinner] = useState(false)
   const uploaderInputRef = useRef(null)
@@ -30,53 +34,52 @@ const PostWrite = (props) => {
   }
 
   const uploadImage = async () => {
-    if (!fileObj) {
-      alert('이미지를 선택해주세요.')
-      return
-    }
-
     const image = new FormData()
     image.append('img', fileObj)
     
     try {
       const res = await API.post.imageUpload(image)
       console.log('이미지 업로드 성공', res)
-      return true
+      return { image_result: true, url: res.data.url }
     } 
     catch(err) {
       console.log('이미지 업로드 실패', err)
-      return false
+      return { image_result: false }
     }
 
   }
 
-  const uploadTag = async () => {
-    if (tags.length === 0) {
-      alert('태그를 1개 이상 작성해주세요.')
-      return
-    }
-
+  const uploadTag = async (image) => {
     const tag_string = tags.map(tag => tag.word).join(' ')
-    const tagObj = { description: tag_string }
+    const tagObj = { description: tag_string, imgUrl: image, userID: login_state.user }
 
     try {
       const res = await API.post.postUpload(tagObj)
       console.log('태그 업로드 성공', res)
-      return true
+      return { tag_result: true }
     } 
     catch(err) {
       console.log('태그 업로드 실패', err)
-      return false
+      return { tag_result: false }
     }
   }
 
   const handleWritePost = async () => {
+    if (!fileObj) {
+      alert('이미지를 선택해주세요.')
+      return
+    }
+
+    if (tags.length === 0) {
+      alert('태그를 1개 이상 작성해주세요.')
+      return
+    }
     setSpinner(true)
     setUploadBtnDisabled(true)
-    const imageResult = await uploadImage()
-    const postResult = await uploadTag()
+    const { image_result, url } = await uploadImage()
+    const { tag_result } = await uploadTag(url)
 
-    if (!imageResult || !postResult) {
+    if (!image_result || !tag_result) {
       alert('업로드 할 수 없습니다.')
     }
 

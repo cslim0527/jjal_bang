@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { BsUpload } from "react-icons/bs"
 
 const ImageUploader = forwardRef((props, ref) => {
-  console.log(props)
   const {fileObj, setFileObj} = props.uploaderFileState
   const {imgInfo, setImgInfo} = props.imgPreviewState
   

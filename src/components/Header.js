@@ -80,7 +80,6 @@ const Header = () => {
         } else {
             return (
                 <>
-                    <Button _onClick={() => history.push('/write') } _type="button" version="cobalt-blue">짤 등록</Button>
                     <Button _onClick={() => history.push('/login') } _type="button">로그인</Button>
                     <Button _onClick={() => history.push('/signup') } _type="button" version="green">회원가입</Button>
                 </>
