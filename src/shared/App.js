@@ -31,7 +31,6 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-
     // 현재 로그인 상태를 스토어에서 가져옴
     dispatch(userActions.getUser())
   }, [])
@@ -46,7 +45,7 @@ function App() {
         <Route path="/login" component={Login} exact />
         <Route path="/signup" component={Signup} exact />
         <Route path="/write" component={PostWrite} exact />
-        <Route path="/detail" component={PostDetail} exact />
+        <Route path="/detail/:post_id" component={PostDetail} exact />
         <Route path="/user/posts/:user_id" component={MyPost} exact />
         <Route path="/user/favorites/:user_id" component={MyFavorites} exact />
         <Route path="/search/:keyword" component={SearchResult} exact />
