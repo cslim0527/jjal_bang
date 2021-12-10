@@ -64,6 +64,12 @@ const Login = () => {
     setLoginDisabled(false)
   }
 
+  const handleKeyEnter = (e) => {
+    if (e.key === 'Enter') {
+      handleClickLoginBtn()
+    }
+  }
+
   useEffect(() => {
     idInputRef.current.focus()
     
@@ -98,8 +104,8 @@ const Login = () => {
         <div className="site-login">
           <p className="label">or with JJAL-BANG</p>
           <div className="login-controls">
-            <input onChange={handleChangeInput} name="user_id" ref={idInputRef} placeholder="아이디" type="text" className="user-id" />
-            <input onChange={handleChangeInput} name="user_pw" placeholder="비밀번호" type="password" className="user-pw" />
+            <input onChange={handleChangeInput} onKeyUp={handleKeyEnter} name="user_id" ref={idInputRef} placeholder="아이디" type="text" className="user-id" autoComplete="new-password"/>
+            <input onChange={handleChangeInput} onKeyUp={handleKeyEnter} name="user_pw" placeholder="비밀번호" type="password" className="user-pw"  autoComplete="new-password"/>
             { !loginTrue && <p className="alert-msg">로그인 정보가 일치하지 않습니다.</p> }
           </div>
 
