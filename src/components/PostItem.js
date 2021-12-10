@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo } from 'react'
 import styled from 'styled-components'
 import {BsFillBookmarkHeartFill, BsFillChatFill, BsFillEyeFill} from 'react-icons/bs'
 import { BASE_URL } from '../shared/api'
@@ -8,7 +8,7 @@ import { actionCreators as postActions } from '../redux/modules/post'
 
 import noImg from '../images/no-image.png'
 
-const PostItem = (props) => {
+const PostItem = React.memo((props) => {
     const dispatch = useDispatch()
     const { commentCnt, createdAt, description, imgUrl, postLikeCnt, viewsCnt, _id } = props.post
     
@@ -50,7 +50,7 @@ const PostItem = (props) => {
             </PostTitleWrap> 
         </PostCard>
     );
-};
+})
 
 PostItem.defaultProps = {
     post: {
