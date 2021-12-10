@@ -10,7 +10,6 @@ import ImageUploader from '../components/ImageUploader'
 import ScaleLoader from "react-spinners/ScaleLoader"
 import Permit from '../shared/Permit'
 
-// TODO  비로그인시 접근불가하게 막을 것
 const PostWrite = (props) => {
   const login_state = useSelector(state => state.user)
   const { history } = props
@@ -106,7 +105,6 @@ const PostWrite = (props) => {
     }
   }, [])
 
-  
   return (
     <Permit>
       <Grid is_container>
