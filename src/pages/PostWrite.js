@@ -223,7 +223,7 @@ const WriteWrap = styled.div`
       min-width: initial;
 
       .preview-box {
-        min-height: 200px;
+        min-height: 300px;
       }
     }
 

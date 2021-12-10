@@ -51,7 +51,7 @@ const ImageUploader = forwardRef((props, ref) => {
             && (
               <>
                 <BsUpload /> 
-                <p>첨부할 이미지를 마우스로 끌어서<br/>추가할 수 있습니다.</p> 
+                <p>클릭 또는 첨부할 이미지를 마우스로 끌어서<br/>추가할 수 있습니다.</p> 
               </>
             )
         }
@@ -65,7 +65,7 @@ const UploaderWrap = styled.label`
     cursor: pointer;
     width: 100%;
     display: flex;
-    min-height: 350px;
+    min-height: 400px;
     border-radius: 5px;
     border: 1px dashed #ccc;
     position: relative;
