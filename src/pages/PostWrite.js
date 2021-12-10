@@ -1,12 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { API } from '../shared/api'
+import { useSelector } from 'react-redux'
 
 import { Grid } from '../elements'
 import TagMaker  from '../components/TagMaker'
 import ImageUploader from '../components/ImageUploader'
+import ScaleLoader from "react-spinners/ScaleLoader"
 
-const PostWrite = () => {
-  // TODO  이미지 삽입, 태그 최소 1개 이상일때 올리기 버튼 활성화 할 것
+// TODO  비로그인시 접근불가하게 막을 것
+const PostWrite = (props) => {
+  const login_state = useSelector(state => state.user)
+  console.log('[PostWrite]', login_state)
+  const { history } = props
+  const [spinner, setSpinner] = useState(false)
+  const uploaderInputRef = useRef(null)
   const [upload_btn_disabled, setUploadBtnDisabled] = useState(true)
   const [fileObj, setFileObj] = useState(null)
   const [tags, setTag] = useState([])
@@ -16,6 +24,7 @@ const PostWrite = () => {
   })
 
   const handleClickCancelUpload = () => {
+    uploaderInputRef.current.value = null
     setFileObj(null)
     setTag([])
     setImgInfo({
@@ -24,8 +33,62 @@ const PostWrite = () => {
     })
   }
 
+  const uploadImage = async () => {
+    const image = new FormData()
+    image.append('img', fileObj)
+    
+    try {
+      const res = await API.post.imageUpload(image)
+      console.log('이미지 업로드 성공', res)
+      return { image_result: true, url: res.data.url }
+    } 
+    catch(err) {
+      console.log('이미지 업로드 실패', err)
+      return { image_result: false }
+    }
+
+  }
+
+  const uploadTag = async (image) => {
+    const tag_string = tags.map(tag => tag.word).join(' ')
+    const tagObj = { description: tag_string, imgUrl: image, userID: login_state.user }
+
+    try {
+      const res = await API.post.postUpload(tagObj)
+      console.log('태그 업로드 성공', res)
+      return { tag_result: true }
+    } 
+    catch(err) {
+      console.log('태그 업로드 실패', err)
+      return { tag_result: false }
+    }
+  }
+
+  const handleWritePost = async () => {
+    if (!fileObj) {
+      alert('이미지를 선택해주세요.')
+      return
+    }
+
+    if (tags.length === 0) {
+      alert('태그를 1개 이상 작성해주세요.')
+      return
+    }
+    setSpinner(true)
+    setUploadBtnDisabled(true)
+    const { image_result, url } = await uploadImage()
+    const { tag_result } = await uploadTag(url)
+
+    if (!image_result || !tag_result) {
+      alert('업로드 할 수 없습니다.')
+    }
+
+    setSpinner(false)
+    setUploadBtnDisabled(false)
+    history.push('/')
+  }
+
   useEffect(() => {
-    console.log('[PostWrite]', fileObj, tags)
     if (fileObj && tags.length) {
       setUploadBtnDisabled(false)
     } else {
@@ -37,7 +100,7 @@ const PostWrite = () => {
     <Grid is_container>
       <WriteWrap>
         <div className="write-left">
-          <ImageUploader imgPreviewState={{imgInfo, setImgInfo}} uploaderFileState={{fileObj, setFileObj}}/>
+          <ImageUploader ref={uploaderInputRef} imgPreviewState={{imgInfo, setImgInfo}} uploaderFileState={{fileObj, setFileObj}}/>
         </div>
         
         <div className="write-right">
@@ -45,8 +108,10 @@ const PostWrite = () => {
           <div className="write-control pager">
             <div className="control-subject">짤방</div>
             <div className="control-content">
-              <button type="button" className="btn back-btn">뒤로가기</button>
-              <button type="button" className="btn upload-btn" disabled={upload_btn_disabled}>올리기</button>
+              <button type="button" className="btn back-btn" onClick={() => history.goBack()}>뒤로가기</button>
+              <button type="button" className="btn upload-btn" onClick={handleWritePost} disabled={upload_btn_disabled}>
+                { spinner ? <ScaleLoader height={14} color="#fff"/> : '올리기' }
+              </button>
             </div>
           </div>
 
@@ -158,7 +223,7 @@ const WriteWrap = styled.div`
       min-width: initial;
 
       .preview-box {
-        min-height: 200px;
+        min-height: 300px;
       }
     }
 

@@ -1,6 +1,10 @@
 import GlobalStyles from './GlobalStyles'
 import styled from 'styled-components'
 import { Route, useLocation } from 'react-router'
+import { useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { actionCreators as userActions } from '../redux/modules/user'
+
 
 import PostList from '../pages/PostList'
 import PostWrite from '../pages/PostWrite'
@@ -24,7 +28,14 @@ const showHeaderFooter = ({pathname}) => {
 
 function App() {
   const location = useLocation()
-  console.log(location)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+
+    // 현재 로그인 상태를 스토어에서 가져옴
+    dispatch(userActions.getUser())
+  }, [])
+
   return (
     <>
       {
