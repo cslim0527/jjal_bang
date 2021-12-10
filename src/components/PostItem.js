@@ -1,27 +1,34 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'
 import {BsFillBookmarkHeartFill, BsFillChatFill, BsFillEyeFill} from 'react-icons/bs'
+import { BASE_URL } from '../shared/api';
 
 import { Grid } from '../elements';
 import noImg from '../images/no-image.png'
 
 const PostItem = (props) => {
+    const { commentCnt, createdAt, description, imgUrl, postLikeCnt, viewsCnt, _id } = props.post
     return (
         <PostCard>
             <PostTitleWrap>
-                <img src={props.post.img} alt=""/>
+                <img src={BASE_URL + imgUrl} alt=""/>
+                <div className='tag-list'>
+                {
+                    description.split(' ').map((tag, idx) => <span key={`tag-word-${idx}`} className='tag-item'>{tag}</span>)
+                }
+                </div>
                 <IconWrap>
                     <Icon>
                         <BsFillBookmarkHeartFill />
-                        <span className="count-txt">8</span>
+                        <span className="count-txt">{postLikeCnt}</span>
                     </Icon>
                     <Icon>
                         <BsFillChatFill />
-                        <span className="count-txt">8</span>
+                        <span className="count-txt">{commentCnt}</span>
                     </Icon>
                     <Icon>
                         <BsFillEyeFill />
-                        <span className="count-txt">8k</span>
+                        <span className="count-txt">{viewsCnt}</span>
                     </Icon>
                 </IconWrap>
             </PostTitleWrap> 
@@ -43,6 +50,22 @@ const PostCard = styled.div`
     border-radius: 5px;
     cursor: pointer;
     /* max-width: 313.5px; */
+
+    .tag-list {
+        margin: 5px 0;
+        font-size: 11px;
+        font-family: initial;
+        display: flex;
+        flex-wrap: wrap;
+
+        .tag-item {
+            padding: 3px 7px 4px 7px;
+            margin-right: 8px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            background-color: #313131;
+        }
+    }
 `
 const PostTitleWrap = styled.div`
     background-color: #474a51;
