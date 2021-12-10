@@ -3,6 +3,7 @@ import { produce } from 'immer'
 import { API } from '../../shared/api'
 
 const GET_POST = 'GET_POST'
+const ADD_BOOKMARK_CNT = 'ADD_BOOKMARK_CNT'
 
 const initialState = {
   posts: [],
@@ -11,6 +12,7 @@ const initialState = {
 }
 
 const getPosts = createAction(GET_POST, (post_data) => ({post_data}))
+const addBookMarkCnt = createAction(ADD_BOOKMARK_CNT, (_id) => ({_id}))
 
 // middlewares
 const getPostAction = (page) => {
@@ -32,10 +34,16 @@ export default handleActions({
     draft.page = action.payload.post_data.page
   }),
 
+  [ADD_BOOKMARK_CNT]: (state, action) => produce(state, (draft) => {
+    const idx = draft.posts.findIndex(post => post._id === action.payload._id)
+    draft.posts[idx].postLikeCnt += 1
+  }),
+
 }, initialState)
 
 const actionCreators = {
-  getPostAction
+  getPostAction,
+  addBookMarkCnt
 }
 
 export { actionCreators }

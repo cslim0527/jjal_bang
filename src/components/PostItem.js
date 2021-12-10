@@ -1,24 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import {BsFillBookmarkHeartFill, BsFillChatFill, BsFillEyeFill} from 'react-icons/bs'
-import { BASE_URL } from '../shared/api';
+import { BASE_URL } from '../shared/api'
+import { history } from '../redux/configureStore'
+import { useDispatch } from 'react-redux'
+import { actionCreators as postActions } from '../redux/modules/post'
 
-import { Grid } from '../elements';
 import noImg from '../images/no-image.png'
 
 const PostItem = (props) => {
+    const dispatch = useDispatch()
     const { commentCnt, createdAt, description, imgUrl, postLikeCnt, viewsCnt, _id } = props.post
+    
+    const handleClickPost = (_id) => {
+        history.push(`/detail/${_id}`)
+    }
+
+    const handleClickBookMark = (_id) => {
+        dispatch(postActions.addBookMarkCnt(_id))
+    }
+
+    const handleSearchTag = (tag) => {
+        history.push(`/search/${tag}`)
+    }
+
     return (
         <PostCard>
             <PostTitleWrap>
-                <img src={BASE_URL + imgUrl} alt=""/>
+                <img src={BASE_URL + imgUrl} alt="" onClick={() => handleClickPost(_id)}/>
                 <div className='tag-list'>
                 {
-                    description.split(' ').map((tag, idx) => <span key={`tag-word-${idx}`} className='tag-item'>{tag}</span>)
+                    description.split(' ').map((tag, idx) => <span key={`tag-word-${idx}`} onClick={() => handleSearchTag(tag)} className='tag-item'>{tag}</span>)
                 }
                 </div>
                 <IconWrap>
-                    <Icon>
+                    <Icon className="bookmark-btn" onClick={() => handleClickBookMark(_id)}>
                         <BsFillBookmarkHeartFill />
                         <span className="count-txt">{postLikeCnt}</span>
                     </Icon>
@@ -45,11 +61,9 @@ PostItem.defaultProps = {
 export default PostItem;
 
 const PostCard = styled.div`
-    background: linear-gradient(165deg, rgb(105, 216, 202) 0%, rgb(53, 146, 255) 50%, rgb(156, 49, 255) 100%);
     position: relative;
     border-radius: 5px;
-    cursor: pointer;
-    /* max-width: 313.5px; */
+    max-width: 245px;
 
     .tag-list {
         margin: 5px 0;
@@ -64,6 +78,7 @@ const PostCard = styled.div`
             border: 1px solid #ccc;
             border-radius: 12px;
             background-color: #313131;
+            cursor: pointer;
         }
     }
 `
@@ -79,6 +94,7 @@ const PostTitleWrap = styled.div`
     
     img{
         width: 100%;
+        cursor: pointer;
     }
 
 `
@@ -88,6 +104,10 @@ const IconWrap = styled.div`
     align-items: flex-end;
     padding: 10px 16px 5px 16px;
 
+    .bookmark-btn {
+        cursor: pointer;
+    }
+
 `
 const TitleWrap = styled.div`
     text-align: center;
@@ -96,7 +116,6 @@ const Icon = styled.div`
     display: flex;
     align-items: center;
     font-size: 12px;
-    cursor: pointer;
     color: #b4b9c2;
     transition: color 0.2s;
 

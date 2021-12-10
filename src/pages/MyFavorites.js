@@ -58,9 +58,10 @@ const MyPage = () => {
 const MyPageWrap = styled.section`
   .top-area {
     background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('https://i.imgur.com/SzQGbZV_d.jpg?maxwidth=2560&fidelity=grand');
-    background-size: 100%;
+    background-size: cover;
     background-repeat: no-repeat;
-
+    padding: 16px;
+    
     .user-profile {
       margin-top: 60px;
 

@@ -23,9 +23,15 @@ export const API = {
     login: (login_info) => instance.post('/api/users/auth', login_info),
     signup: (signup_info) => instance.post('/api/users/users', signup_info)
   },
+
   post: {
     getPosts: (page = 1) => instance.post('/api/posts/lists', {page: page}),
     imageUpload: (img) => instance.post('/api/posts/uploadfile', img),
-    postUpload: (post) => instance.post('/api/posts', post)
+    postUpload: (post) => instance.post('/api/posts', post),
+    getDetail: (post_id) => instance.post('/api/posts/details', post_id)
+  },
+
+  comment: {
+    writeComment: (comment) =>  instance.post('/api/comment/', comment),
   }
 }

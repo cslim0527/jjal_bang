@@ -50,6 +50,7 @@ export default handleActions({
   [LOG_OUT]: (state, action) => produce(state, (draft) => {
     draft.user = null
     draft.is_login = false
+    sessionStorage.removeItem('recent_list')
   })
 
 }, initialState)

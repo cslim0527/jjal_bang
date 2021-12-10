@@ -2,11 +2,12 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Button = (props) => {
-  const { _onClick, _type, _className , version, children } = props
+  const { _onClick, _type, _className, version, children, _disabled } = props
   const styles = {
     type: _type,
     onClick: _onClick,
     className: _className,
+    disabled: _disabled,
     version
   }
 
@@ -23,6 +24,10 @@ Button.defaultProps = {
 export default Button
 
 const ButtonEl = styled.button`
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   border: 0;
   cursor: pointer;
   background-color: none;

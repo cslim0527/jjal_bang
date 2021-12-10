@@ -80,11 +80,11 @@ const PostWrite = (props) => {
 
     if (!image_result || !tag_result) {
       alert('업로드 할 수 없습니다.')
+      setSpinner(false)
+      setUploadBtnDisabled(false)
+    } else {
+      window.location.href = '/'
     }
-
-    setSpinner(false)
-    setUploadBtnDisabled(false)
-    history.push('/')
   }
 
   useEffect(() => {
