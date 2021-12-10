@@ -1,16 +1,19 @@
-import React, { useEffect, useRef, useState, useMemo } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styled from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux'
 import { history } from '../redux/configureStore'
+import { actionCreators as userActions } from '../redux/modules/user'
+import { API } from '../shared/api'
 import _ from "lodash"
 
 import logo from '../images/logo.svg'
 import {FiSearch} from 'react-icons/fi'
 import { Grid, Button } from '../elements'
-import { useSelector } from 'react-redux'
 
 
 const Header = () => {
     console.log('[Header]')
+    const dispatch = useDispatch()
     const login_state = useSelector(state => state.user) 
     const [text, setText] = React.useState()
     const [shadow, setShadow] = useState(false)
@@ -46,8 +49,8 @@ const Header = () => {
         setMyModal(!myModal)
     }
 
-    const handleClickLogout = () => {
-
+    const handleClickLogout = async () => {
+        dispatch(userActions.logoutAction())
     }
 
     const renderBtnGroup = () => {
@@ -218,6 +221,8 @@ const LoginBtn = styled.a `
     margin-right: 10px;
 `
 const InputSearch = styled.div `
+    max-width: 540px;
+    width: 40vw;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -225,7 +230,11 @@ const InputSearch = styled.div `
 
     .search-box {
         position: relative;
-        width: 80vh;
+        width: 100%;
+    }
+
+    @media screen and (max-width: 768px) {
+        display: none;
     }
 `
 const SearchBtn = styled.button `

@@ -4,6 +4,7 @@ import { produce } from 'immer'
 
 const SET_USER = 'SET_USER'
 const GET_USER = 'GET_USER'
+const LOG_OUT = 'LOG_OUT'
 
 const initialState = {
   user: null,
@@ -12,6 +13,7 @@ const initialState = {
 
 const getUser = createAction(GET_USER, () => ({}))
 const setUser = createAction(SET_USER, (user) => ({user}))
+const logout = createAction(LOG_OUT, () => ({}))
 
 // middlewares
 const loginAction = (user) => {
@@ -23,10 +25,19 @@ const loginAction = (user) => {
   }
 }
 
+const logoutAction = () => {
+  return (dispatch, getState, { history }) => {
+    deleteCookie('jjal_login')
+    dispatch(logout())
+    history.push('/')
+  }
+}
+
 // reducer
 export default handleActions({
   [SET_USER]: (state, action) => produce(state, (draft) => {
-    draft.user = action.payload.userId
+    console.log('[SET_USER]', action.payload.userId)
+    draft.user = action.payload.user.userId
     draft.is_login = true
   }),
 
@@ -34,13 +45,19 @@ export default handleActions({
     const user_id = getCookie('id')
     draft.user = user_id ? user_id : null
     draft.is_login = user_id ? true : false
+  }),
+
+  [LOG_OUT]: (state, action) => produce(state, (draft) => {
+    draft.user = null
+    draft.is_login = false
   })
 
 }, initialState)
 
 const actionCreators = {
   getUser,
-  loginAction
+  loginAction,
+  logoutAction
 }
 
 export { actionCreators }

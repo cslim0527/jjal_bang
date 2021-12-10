@@ -11,6 +11,7 @@ const getCookie = (type) => {
 
 }
 
+// 만료기간 1일 기본값
 const setCookie = (name, value, exp = 1) => {
   const date = new Date()
   date.setTime(date.getTime() + exp * 24 * 60 * 60 * 1000)
