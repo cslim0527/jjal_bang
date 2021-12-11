@@ -27,6 +27,7 @@ const getPostAction = (page) => {
     const user_id = getCookie('id')
     if (user_id) {
       let like_res = await API.like.getList()
+      console.log('좋아요', like_res)
 
       let like_arr = like_res.data
       like_arr = like_arr.filter(post => post.userID === user_id)

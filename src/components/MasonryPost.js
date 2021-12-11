@@ -50,4 +50,10 @@ const MasonryWrap = styled.div`
     background: transparent !important;
     margin-bottom: 10px;
   }
+
+  @media screen and (max-width: 425px) {
+    .my-masonry-grid_column > div {
+      max-width: 100%;
+    }
+  }
 `

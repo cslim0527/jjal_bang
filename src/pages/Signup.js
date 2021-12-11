@@ -4,6 +4,7 @@ import { useHistory } from 'react-router'
 import { API } from '../shared/api'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
+import logo from '../images/logo.svg'
 
 const Signup = (props) => {
   const history = props.history
@@ -151,7 +152,7 @@ const Signup = (props) => {
   return (
     <SignupWrap>
       <div className="signup-container">
-        <h1 onClick={handleClickLogo} className="logo">logo</h1>
+        <h1 onClick={handleClickLogo} className="logo"><img src={logo} alt=""/></h1>
 
         <div className="social-signup">
           <p className="label">Register with</p>

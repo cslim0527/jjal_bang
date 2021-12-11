@@ -174,6 +174,10 @@ const MainHeader = styled.div `
 const LogoPost = styled.div `
   display: flex;
   align-items: center;
+
+  img {
+      width: 100%;
+  }
 `
 const MainLogo = styled.h1 `
     display: flex;

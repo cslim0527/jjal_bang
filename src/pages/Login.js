@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { actionCreators as userActions } from '../redux/modules/user'
 
 import ScaleLoader from "react-spinners/ScaleLoader"
+import logo from '../images/logo.svg'
 
 const Login = () => {
   const dispatch = useDispatch()
@@ -91,7 +92,7 @@ const Login = () => {
   return (
     <LoginWrap>
       <div className="login-container">
-        <h1 onClick={handleClickLogo} className="logo">LOGO</h1>
+        <h1 onClick={handleClickLogo} className="logo"><img src={logo} alt=""/></h1>
 
         <div className="social-login">
           <p className="label">Sign in with</p>
