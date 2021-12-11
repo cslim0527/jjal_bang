@@ -10,6 +10,7 @@ import { Grid, Button } from '../elements'
 import { HiDownload, HiTrash } from 'react-icons/hi'
 
 const PostDetail = (props) => {
+	console.log('[PostDetail]')
 	const history = props.history
 	const { user, is_login } = useSelector(state => state.user)
 	const { post_id } = useParams()
@@ -29,7 +30,7 @@ const PostDetail = (props) => {
 		}
 	}
 
-	const renderRecentList = () => {
+	const createRecentList = () => {
 		const recentData = sessionStorage.getItem('recent_list')
 		if (recentData) {
 			const recent_arr = recentData.split(',')
@@ -40,7 +41,7 @@ const PostDetail = (props) => {
 				const url = BASE_URL + info[1]
 				const tags = info[2]
 				return (
-					<li className='recent-item' onClick={() => window.location.href = `/detail/${id}`}>
+					<li key={`recent-${idx}`} className='recent-item' onClick={() => window.location.href = `/detail/${id}`}>
 						<div className='item-img'>
 							<img src={url} alt="" />
 						</div>
@@ -83,26 +84,83 @@ const PostDetail = (props) => {
 			commentVal : ta_content
 		}
 
-		console.log('코멘트 객체: ', comment_obj)
-
 		return comment_obj
 	}
 
 	const sendCommentData = async (comment) => {
-		const res = await API.comment.writeComment(comment)
-		console.log(res)
+		const res = await API.comment.write(comment)
 		return res.data
 	}
 
 	const handleWriteComment = async () => {
 		setWriteDisabled(true)
 		const comment = getCommentWriteData()
-		const result = await sendCommentData()
-		console.log('코멘트 작성 결과: ', result)
 
-		// TODO  코멘트 작성에 성공 할 경우 textarea 비우기 
-		setTa('') 
+		try {
+			await sendCommentData(comment)
+			setTa('') 
+			fetchCommentList()
+		}
+
+		catch(err) {
+			alert('댓글 작성에 실패하였습니다.')
+		}
+
 		setWriteDisabled(false)
+	}
+
+	const handleDeleteComment = async (data) => {
+		const deleteConfirm = window.confirm('댓글을 완전히 삭제 할까요?')
+		if (deleteConfirm) {
+			try {
+				await API.comment.delete(data)
+				fetchCommentList()
+			}
+			catch(err) {
+				alert('댓글을 삭제 할 수 없습니다.')
+			}
+		}
+	}
+
+	const createCommentList = () => {
+		if (comment_data.length) {
+			return comment_data.map((comment, idx) => {
+
+				const deleteData = { 
+					commentId: comment.commentId, 
+					userID: comment.userID
+				}
+
+				return (
+					<li key={`comment-${idx}`} className='comment-item'>
+						<div className='item-info'>
+							<span className='user-id'>{ comment.userID }</span>
+							<span className='datetime'>{ moment(comment.date).format('YYYY-MM-DD HH:mm:ss') }</span>
+						</div>
+						<div className='item-content'>
+							{ comment.commentVal }
+						</div>
+						<div className='btn-group'>
+							{/*<Button _type="button" _className="modify-btn">수정</Button>*/}
+							<Button _type="button" _className="delete-btn" _onClick={() => handleDeleteComment(deleteData)}>삭제</Button>
+						</div>
+					</li>
+				)
+			})
+		} else {
+			return (
+				<div className='empty-comment'>댓글이 없습니다.</div>
+			)
+		}
+	}
+
+	const fetchCommentList = async () => {
+		const id_obj = {
+			postId: post_id
+		}
+
+		const res = await API.comment.getList(id_obj)
+		setComentData(res.data.comment)
 	}
 
 	useEffect(() => {
@@ -111,8 +169,9 @@ const PostDetail = (props) => {
 
 	useEffect(() => {
 		fetchPostDetail()
+		fetchCommentList()
 	}, [])
-
+	
 	return (
 		<PostDetailWrap>
 			<Grid is_container is_flex>
@@ -175,23 +234,11 @@ const PostDetail = (props) => {
 
 						<div className='comment-area'>
 							<div className='comment-header'>
-								댓글 10
+								댓글 { comment_data.length }
 							</div>
 							<div className='comment-body'>
 								<ul className='comment-list'>
-									<li className='comment-item'>
-										<div className='item-info'>
-											<span className='user-id'>유저아이디</span>
-											<span className='datetime'>2021-12-10 10:00:00</span>
-										</div>
-										<div className='item-content'>
-											댓글 작성 내용 하하하하하하!
-										</div>
-										<div className='btn-group'>
-											<Button _type="button" _className="modify-btn">수정</Button>
-											<Button _type="button" _className="delete-btn">삭제</Button>
-										</div>
-									</li>
+									{ createCommentList() }
 								</ul>
 							</div>
 						</div>
@@ -202,7 +249,7 @@ const PostDetail = (props) => {
 					<div className='recent-header'>최근 본 짤</div>
 					<div className='recent-body'>
 						<ul className='recent-list'>
-							{renderRecentList()}
+							{ createRecentList() }
 						</ul>
 					</div>
 				</div>

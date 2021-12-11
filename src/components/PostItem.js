@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import styled from 'styled-components'
-import {BsFillBookmarkHeartFill, BsFillChatFill, BsFillEyeFill} from 'react-icons/bs'
+import { BsFillChatFill, BsFillEyeFill, BsHeartFill } from 'react-icons/bs'
+
 import { BASE_URL } from '../shared/api'
 import { history } from '../redux/configureStore'
 import { useDispatch } from 'react-redux'
@@ -10,14 +11,15 @@ import noImg from '../images/no-image.png'
 
 const PostItem = React.memo((props) => {
     const dispatch = useDispatch()
-    const { commentCnt, createdAt, description, imgUrl, postLikeCnt, viewsCnt, _id } = props.post
+    console.log('포스트 렌더: ', props.post)
+    const { commentCnt, description, imgUrl, postLikeCnt, viewsCnt, _id } = props.post
     
     const handleClickPost = (_id) => {
         history.push(`/detail/${_id}`)
     }
 
     const handleClickBookMark = (_id) => {
-        dispatch(postActions.addBookMarkCnt(_id))
+        dispatch(postActions.likeChangeAction(_id))
     }
 
     const handleSearchTag = (tag) => {
@@ -34,9 +36,9 @@ const PostItem = React.memo((props) => {
                 }
                 </div>
                 <IconWrap>
-                    <Icon className="bookmark-btn" onClick={() => handleClickBookMark(_id)}>
-                        <BsFillBookmarkHeartFill />
-                        <span className="count-txt">{postLikeCnt}</span>
+                    <Icon className={ props.post.like ? "bookmark-btn active" : "bookmark-btn" } onClick={() => handleClickBookMark(_id)}>
+                        <BsHeartFill />
+                        <span className="count-txt">찜</span>
                     </Icon>
                     <Icon>
                         <BsFillChatFill />
@@ -121,6 +123,10 @@ const Icon = styled.div`
 
     &:hover {
         color: #fff;
+    }
+
+    &.active {
+        color: #6db931;
     }
     
     .count-txt {
