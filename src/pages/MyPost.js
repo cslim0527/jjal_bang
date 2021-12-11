@@ -1,16 +1,32 @@
-import React, { useState } from 'react'
-import { useHistory, useLocation } from 'react-router'
+import React, { useState,useEffect } from 'react'
+import { useHistory, useLocation, useParams } from 'react-router'
 import styled from 'styled-components'
+import axios from 'axios'
+import {userParams} from 'react-router'
+import MasonryPost from '../components/MasonryPost'
 
 import { Grid, Button } from '../elements'
 import PostItem from '../components/PostItem'
+import { getCookie } from '../shared/Cookie'
 
 const MyPage = () => {
   const location = useLocation()
   const history = useHistory()
-  console.log(location)
+  const params = useParams()
+  const user_id = getCookie('id')
 
   const [post_list, setPostList] = useState([])
+  const getPostImg = () => {
+    console.log(getCookie('id'))
+    axios.post('http://13.209.85.96/api/users/myPostImgs',{"userID":getCookie('id')}).then(function(response){
+      console.log(response.data)
+      setPostList(response.data)
+    })
+  }
+
+  useEffect(()=>{
+    getPostImg()
+  },[])
 
   const handleClickGoWrite = () => {
     history.push('/write')
@@ -21,8 +37,8 @@ const MyPage = () => {
       <div className="top-area">
         <Grid is_container height="258px" is_flex flex_align="center">
           <div className="user-profile">
-            <div className="name">UserId</div>
-            <div className="post-count">1 짤방</div>
+            <div className="name">{user_id}</div>
+            <div className="post-count">{post_list.length} 짤방</div>
           </div>
         </Grid>
         <Grid is_container>
@@ -47,7 +63,7 @@ const MyPage = () => {
                 <div>여러분의 짤방을 공유해주세요!</div>
               </div>
             )
-            : post_list.map((post, idx) => <PostItem />)
+            : <MasonryPost post_data={post_list}/>
 
         }
         </Grid>

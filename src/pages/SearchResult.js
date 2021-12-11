@@ -8,7 +8,7 @@ import MasonryPost from '../components/MasonryPost'
 
 const PostUpload = () => {
     const params = useParams()
-    
+    console.log(params)
     const [postArray, setPostArray] = useState([])
     const getPostResult = () => {
         axios.post('http://13.209.85.96/api/posts/search/tag', {"description":params.keyword}).then(function(response){
