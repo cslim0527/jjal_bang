@@ -43,4 +43,5 @@ export const API = {
     add: (like_info) => instance.post('/api/like/likes', like_info),
     remove: (like_info) => instance.delete('/api/like/likes', { data: like_info }),
   }
+
 }
