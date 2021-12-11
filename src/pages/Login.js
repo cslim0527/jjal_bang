@@ -44,7 +44,6 @@ const Login = () => {
     
     let res = await API.users.login(login_data)
     if (res.data.result === 'success') {
-      console.log(res.data)
       dispatch(userActions.loginAction({
         userId: res.data.userId,
         token: res.data.token

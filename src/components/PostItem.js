@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { BsFillChatFill, BsFillEyeFill, BsHeartFill } from 'react-icons/bs'
 
@@ -6,12 +6,12 @@ import { BASE_URL } from '../shared/api'
 import { history } from '../redux/configureStore'
 import { useDispatch } from 'react-redux'
 import { actionCreators as postActions } from '../redux/modules/post'
+import { getCookie } from '../shared/Cookie'
 
 import noImg from '../images/no-image.png'
 
 const PostItem = React.memo((props) => {
     const dispatch = useDispatch()
-    console.log('포스트 렌더: ', props.post)
     const { commentCnt, description, imgUrl, postLikeCnt, viewsCnt, _id } = props.post
     
     const handleClickPost = (_id) => {
@@ -19,6 +19,11 @@ const PostItem = React.memo((props) => {
     }
 
     const handleClickBookMark = (_id) => {
+        if (!getCookie('id')) {
+            alert('로그인 후 사용가능합니다.')
+            return
+        }
+
         dispatch(postActions.likeChangeAction(_id))
     }
 

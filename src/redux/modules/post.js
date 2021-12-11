@@ -26,9 +26,11 @@ const getPostAction = (page) => {
 
     const user_id = getCookie('id')
     if (user_id) {
-      const like_res = await API.like.getList()
+      let like_res = await API.like.getList()
 
-      const like_arr = like_res.data
+      let like_arr = like_res.data
+      like_arr = like_arr.filter(post => post.userID === user_id)
+
       if (like_arr.length) {
         like_arr.forEach(like_post => {
           const idx = post_data.posts.findIndex(post => post._id === like_post._id)
@@ -60,9 +62,11 @@ const likeChangeAction = (_id) => {
     }
 
     if (post_arr[idx].like) {
-      await API.like.remove(like_info)
+      const res = await API.like.remove(like_info)
+      console.log('라이크 해제', res)
     } else {
-      await API.like.add(like_info)
+      const res = await API.like.add(like_info)
+      console.log('라이크 추가', res)
     }
     
     dispatch(changeLike(_id))
