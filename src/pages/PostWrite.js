@@ -51,7 +51,6 @@ const PostWrite = (props) => {
   const uploadTag = async (image) => {
     const tag_string = tags.map(tag => tag.word).join(' ')
     const tagObj = { description: tag_string, imgUrl: image, userID: login_state.user }
-    console.log(tagObj)
     try {
       const res = await API.post.postUpload(tagObj)
       console.log('태그 업로드 성공', res)
