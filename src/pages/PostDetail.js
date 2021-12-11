@@ -35,13 +35,12 @@ const PostDetail = (props) => {
 			const recent_arr = recentData.split(',')
 			const parts = recent_arr.map((post, idx) => post.split('|'))
 			const filtered = _.uniqBy(parts, 0);
-			console.log(filtered)
 			return filtered.map((info, idx) => {
 				const id = info[0]
 				const url = BASE_URL + info[1]
 				const tags = info[2]
 				return (
-					<li className='recent-item' onClick={() => history.push(`/detail/${id}`)}>
+					<li className='recent-item' onClick={() => window.location.href = `/detail/${id}`}>
 						<div className='item-img'>
 							<img src={url} alt="" />
 						</div>
@@ -79,8 +78,7 @@ const PostDetail = (props) => {
 		if (ta_content === '') return
 
 		const comment_obj = {
-			commentId: 1,
-			userId: user,
+			userID: user,
 			postId: post_id,
 			commentVal : ta_content
 		}
