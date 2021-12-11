@@ -33,5 +33,7 @@ export const API = {
 
   comment: {
     writeComment: (comment) =>  instance.post('/api/comment/', comment),
-  }
+  },
+
+  
 }
