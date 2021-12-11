@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { history } from '../redux/configureStore'
+import { useSelector, useDispatch } from 'react-redux'
 import { actionCreators as userActions } from '../redux/modules/user'
-import { API } from '../shared/api'
+import styled from 'styled-components'
 import _ from "lodash"
 
 import logo from '../images/logo.svg'
@@ -11,7 +11,6 @@ import {FiSearch} from 'react-icons/fi'
 import { Grid, Button } from '../elements'
 
 const Header = () => {
-    console.log('[Header]')
     const dispatch = useDispatch()
     const login_state = useSelector(state => state.user) 
     const [text, setText] = React.useState()
@@ -132,7 +131,6 @@ const MainHeader = styled.div `
 
     &.shadow {
         box-shadow: rgb(0, 0, 0) 0px 0px 25px 5px;
-        opacity: 0.8;
     }
 
     .btn-group {

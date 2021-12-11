@@ -143,7 +143,7 @@ const PostDetail = (props) => {
 						{
 
 							detail_data?.description && detail_data?.description.split(' ').map((tag, idx) => {
-								return <Button key={`tag-u-${idx}`} _type="button" _className='tag-item' version="cobalt-blue">{tag}</Button>
+								return <Button key={`tag-u-${idx}`}  _onClick={() => history.push(`/search/${tag}`)} _type="button" _className='tag-item' version="cobalt-blue">{tag}</Button>
 							})
 
 						}
