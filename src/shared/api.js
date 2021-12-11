@@ -5,7 +5,7 @@ export const BASE_URL = 'http://13.209.85.96/'
 
 const instance = axios.create({
   baseURL: BASE_URL,
-  timeout: 2000,
+  timeout: 3000,
   headers: {
 		'content-type': 'application/json;charset=UTF-8',
 		accept: 'application/json,',
