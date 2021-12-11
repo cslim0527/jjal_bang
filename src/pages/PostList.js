@@ -10,6 +10,7 @@ import MasonryPost from '../components/MasonryPost'
 const PostList = (props) => {
   const dispatch = useDispatch()
   const post_data = useSelector(state => state.post)
+  console.log('모든 데이터', post_data)
 
   const getPostList = () => {
     dispatch(postActions.getPostAction(post_data.page))

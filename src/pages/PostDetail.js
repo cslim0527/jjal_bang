@@ -191,7 +191,7 @@ const PostDetail = (props) => {
 							<a download href={`${BASE_URL}${detail_data?.imgUrl}`} className='download-btn'>
 								<HiDownload />
 							</a>
-							<HiTrash className='delete-btn'/>
+							{ false && <HiTrash className='delete-btn'/> }
 						</div>
 					</div>
 
@@ -225,8 +225,8 @@ const PostDetail = (props) => {
 									<div className='comment-adder before'>
 										<div className='guide-text'>댓글 작성은 회원만 가능합니다.</div>
 										<div className='btn-group'>
-											<Button _type="button">로그인</Button>
-											<Button _type="button" version="green">회원가입</Button>
+											<Button _type="button" _onClick={() => history.push('/login')}>로그인</Button>
+											<Button _type="button" version="green" _onClick={() => history.push('/signup')}>회원가입</Button>
 										</div>
 									</div>
 								)
@@ -513,6 +513,12 @@ const PostDetailWrap = styled.section`
 				}
 			}
 		}
+	}
+
+	.empty-comment {
+		font-size: 14px;
+		text-align: center;
+		padding-top: 40px;
 	}
 
 	@media screen and (max-width: 768px) {

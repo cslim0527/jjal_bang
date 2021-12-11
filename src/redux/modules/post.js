@@ -27,21 +27,19 @@ const getPostAction = (page) => {
     const user_id = getCookie('id')
     if (user_id) {
       let like_res = await API.like.getList()
-      console.log('좋아요', like_res)
+      // let like_arr = like_res.data
+      // like_arr = like_arr.filter(post => post.userID === user_id)
 
-      let like_arr = like_res.data
-      like_arr = like_arr.filter(post => post.userID === user_id)
-
-      if (like_arr.length) {
-        like_arr.forEach(like_post => {
-          const idx = post_data.posts.findIndex(post => post._id === like_post._id)
+      // if (like_arr.length) {
+      //   like_arr.forEach(like_post => {
+      //     const idx = post_data.posts.findIndex(post => post._id === like_post._id)
   
-          if (idx > 0 && post_data.posts[idx]._id === like_post._id) {
-            post_data.posts[idx]['like'] = true
-          }
+      //     if (idx > 0 && post_data.posts[idx]._id === like_post._id) {
+      //       post_data.posts[idx]['like'] = true
+      //     }
   
-        })
-      }
+      //   })
+      // }
     }
     dispatch(getPosts(post_data))
   }
