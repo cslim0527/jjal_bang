@@ -32,8 +32,16 @@ export const API = {
   },
 
   comment: {
-    writeComment: (comment) =>  instance.post('/api/comment/', comment),
+    write: (comment) =>  instance.post('/api/comment/', comment),
+    getList: (post_id) => instance.post('/api/comment/detail', post_id),
+    delete: (comment_info) => instance.delete('/api/comment/detail', { data: comment_info }),
+    update: (comment) =>  instance.post('/api/comment/detail', comment),
   },
 
-  
+  like: {
+    getList: (user_id) => instance.post('/api/users/likeImg', user_id),
+    add: (like_info) => instance.post('/api/like/likes', like_info),
+    remove: (like_info) => instance.delete('/api/like/likes', { data: like_info }),
+  }
+
 }

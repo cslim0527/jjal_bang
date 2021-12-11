@@ -29,7 +29,7 @@ const logoutAction = () => {
   return (dispatch, getState, { history }) => {
     deleteCookie('jjal_login')
     dispatch(logout())
-    history.push('/')
+    window.location.href = '/'
   }
 }
 
